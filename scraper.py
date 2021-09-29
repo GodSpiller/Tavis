@@ -3,6 +3,20 @@ from bs4 import BeautifulSoup
 from time import sleep
 from urllib.robotparser import RobotFileParser
 
+from requests.models import Response
+
+
+def scraper2(catalogId):
+    print(catalogId)
+    link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
+        catId = catalogId
+    )
+
+    response = json.loads(requests.get(link))
+
+    for offer in response:
+        print("   " + offer['Heading'])
+
 def skraper(storeID, catId):
 
     url = 'https://etilbudsavis.dk/businesses/{dealerid}/publications/{catalogid}/paged'.format(
@@ -41,7 +55,7 @@ def getAllCatalogs(url):
                     storeId = i['state']['data']['dealerId'],
                     catId = i['state']['data']['id']
                 ))
-                skraper(i['state']['data']['dealerId'], i['state']['data']['id'])
+                scraper2(i['state']['data']['id'])
     
     """
     for i in range (len(data['props']['reactQueryState']['queries'])):
