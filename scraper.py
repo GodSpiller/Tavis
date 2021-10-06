@@ -13,8 +13,20 @@ def scraper(catalogId):
     response = json.loads(requests.get(link).text)
 
     for offer in response:
+        print(offer['offer']['heading'])
         print(offer['offer']['pricing']['price'])
 
+def recipeScraper(url):
+    rp.set_url(url)
+    rp.read()
+    
+    r=requests.get(url)
+    r_parse = BeautifulSoup(r.text, "html.parser")
+
+    print(url)
+    for list in r_parse.find_all('li', itemprop='recipeIngredient'):
+            print(list.text)
+            
 def getAllCatalogs(url):
     rp.set_url(url)
     rp.read()
@@ -32,10 +44,26 @@ def getAllCatalogs(url):
                     storeId = i['state']['data']['dealerId'],
                     catId = i['state']['data']['id']
                 ))
-                scraper(i['state']['data']['id'])    
+                scraper(i['state']['data']['id'])
+
+def getAllRecipes(url):
+    rp.set_url(url)
+    rp.read()
+    
+    r=requests.get(url)
+    r_parse = BeautifulSoup(r.text, "html.parser")
+
+    for link in r_parse.find_all('a'):
+        if link.get('href') != None and "https://www.valdemarsro.dk/" in link.get('href'):
+            #recipeScraper(link.get('href'))
+            print(link.get('href'))
+
+    #recipeScraper(ListOfLinks<>)
 
 rp=RobotFileParser()
 
 urllink = "https://etilbudsavis.dk/discover/groceries"
+urllink2 = "https://www.valdemarsro.dk/opskrifter/"
 
-getAllCatalogs(urllink)
+#getAllCatalogs(urllink)
+getAllRecipes(urllink2)
