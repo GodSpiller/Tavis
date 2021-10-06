@@ -32,8 +32,7 @@ def getAllCatalogs(url):
                     storeId = i['state']['data']['dealerId'],
                     catId = i['state']['data']['id']
                 ))
-                scraper(i['state']['data']['id'])
-
+                scraper(i['state']['data']['id'])    
 
 rp=RobotFileParser()
 
