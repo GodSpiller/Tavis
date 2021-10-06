@@ -16,16 +16,14 @@ def scraper(catalogId):
         print(offer['offer']['heading'])
         print(offer['offer']['pricing']['price'])
 
-def recipeScraper(url):
-    rp.set_url(url)
-    rp.read()
-    
-    r=requests.get(url)
-    r_parse = BeautifulSoup(r.text, "html.parser")
+def recipeScraper(list):
+    for url in list:
+        r=requests.get(url)
+        r_parse = BeautifulSoup(r.content, "html.parser")
 
-    print(url)
-    for list in r_parse.find_all('li', itemprop='recipeIngredient'):
-            print(list.text)
+        print(url)
+        for list in r_parse.find_all('li', {"class" : "components"}):
+               print(list.text)
             
 def getAllCatalogs(url):
     rp.set_url(url)
@@ -48,22 +46,27 @@ def getAllCatalogs(url):
 
 def getAllRecipes(url):
     rp.set_url(url)
-    rp.read()
+    rp.read() 
     
     r=requests.get(url)
     r_parse = BeautifulSoup(r.text, "html.parser")
 
-    for link in r_parse.find_all('a'):
-        if link.get('href') != None and "https://www.valdemarsro.dk/" in link.get('href'):
-            #recipeScraper(link.get('href'))
-            print(link.get('href'))
+    listOfSites = []
+    
 
-    #recipeScraper(ListOfLinks<>)
+    for link in r_parse.find_all('a'):
+        if link.get('href') != None and "https://mummum.dk/" in link.get('href') and link.get('href') not in listOfSites:
+            
+            listOfSites.append(link.get('href'))
+            #print(link)
+            #print(link.name)
+
+    return listOfSites
 
 rp=RobotFileParser()
 
 urllink = "https://etilbudsavis.dk/discover/groceries"
-urllink2 = "https://www.valdemarsro.dk/opskrifter/"
+urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
 #getAllCatalogs(urllink)
-getAllRecipes(urllink2)
+recipeScraper(getAllRecipes(urllink2))
