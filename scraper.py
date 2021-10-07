@@ -1,6 +1,6 @@
 import requests, json
 from bs4 import BeautifulSoup
-from time import sleep
+from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 
 from requests.models import Response
@@ -21,9 +21,33 @@ def recipeScraper(list):
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
 
+        tempList = []
+        listOfAmount = []
+        listOfUnits = []
+        listOfIngredients = []
+        
+        
+
         print(url)
-        for list in r_parse.find_all('li', {"class" : "components"}):
-               print(list.text)
+        for li in r_parse.find_all('li', {"class" : "components"}):
+            for span in li.find_all('span'):
+                tempList.append(span.text)
+                #print(span.text)
+                #listOfIngredients.append(list.text.replace('\n', ' '))
+            
+        for i in range(len(tempList)):
+            if (i % 3 == 0): #0 == amount
+                listOfAmount.append(tempList[i])
+            if (i % 3 == 1): #1 == units
+                listOfUnits.append(tempList[i])
+            if (i % 3 == 2): #2 == ingredients
+                listOfIngredients.append(tempList[i])
+
+        print(listOfIngredients)
+            
+            
+
+               
             
 def getAllCatalogs(url):
     rp.set_url(url)
@@ -55,7 +79,7 @@ def getAllRecipes(url):
     
 
     for link in r_parse.find_all('a'):
-        if link.get('href') != None and "https://mummum.dk/" in link.get('href') and link.get('href') not in listOfSites:
+        if link.get('href') != (None or "https://mummum.dk/?page_id=6473") and "https://mummum.dk/" in link.get('href') and link.get('href') not in listOfSites:
             
             listOfSites.append(link.get('href'))
             #print(link)
@@ -69,4 +93,6 @@ urllink = "https://etilbudsavis.dk/discover/groceries"
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
 #getAllCatalogs(urllink)
+#print(getAllRecipes(urllink2))
 recipeScraper(getAllRecipes(urllink2))
+#recipeScraper(["https://mummum.dk/spaghetti-bolognese/", "https://mummum.dk/lakseret/"])
