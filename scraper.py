@@ -2,7 +2,6 @@ import requests, json
 from bs4 import BeautifulSoup
 from time import sleep
 from urllib.robotparser import RobotFileParser
-
 from requests.models import Response
 
 
