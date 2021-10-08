@@ -1,15 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
-import Login from './Login.js';
-import Logout from './Logout.js';
+import Login from './components/Login.js';
+import Logout from './components/Logout.js';
+import Recipe from './components/Recipe.js'
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Login />
-    <Logout />
+    <Recipe />
   </React.StrictMode>,
   document.getElementById('root')
 );

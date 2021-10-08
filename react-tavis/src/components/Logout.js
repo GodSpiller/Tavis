@@ -9,13 +9,16 @@ function Logout() {
     };
 
     return (
-        <div>
+        <div style={{
+            position: 'absolute', left: '56%', top: '61%',
+            transform: 'translate(-50%, -50%)'
+        }}>
             <GoogleLogout
             clientId={clientId}
             buttontText="Logout"
             onLogoutSuccess={onSuccess}
             style={{marginBottom: '200px'}}
-            ></GoogleLogout>
+            >Logout</GoogleLogout>
         </div>
     );
 }

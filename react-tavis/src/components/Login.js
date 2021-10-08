@@ -14,7 +14,9 @@ function Login() {
     };
 
     return (
-        <div>
+        <div style={{
+            position: 'absolute', left: '50%', top: '50%'
+        }}>
             <GoogleLogin 
             clientId={clientId}
             buttonText="Login"
