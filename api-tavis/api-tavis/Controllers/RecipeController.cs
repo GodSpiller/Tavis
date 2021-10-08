@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using api_tavis.Food;
+using api_tavis.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace api_tavis.Controllers
 {
@@ -11,13 +14,6 @@ namespace api_tavis.Controllers
     [Route("[controller]")]
     public class RecipeController : ControllerBase
     {
-        private static readonly string[] recipes = new[]
-        {
-            "Majsdeller", "Guacamole", "Kyllingelår med Marinade", "Chili Con Carne", 
-            "Hotwings", "Kylling Kiev", "Fajitas", "Madpandekager", "Krydrede kyllingelår", 
-            "Minestronesuppe", "Forloren Hare", "Frikadeller", "Boller i Karry"
-        };
-
         private readonly ILogger<RecipeController> _logger;
 
         public RecipeController(ILogger<RecipeController> logger)
@@ -28,8 +24,8 @@ namespace api_tavis.Controllers
         [HttpGet]
         public string Get()
         {
-            Random rnd = new Random();
-            return recipes[rnd.Next(0, recipes.Length - 1)];
+            List<Recipe> recipes = Util.GetRecipes();
+            return JsonConvert.SerializeObject(recipes);
         }
     }
 }
