@@ -5,9 +5,11 @@ import './Recipe.css'
 function Recipe (props) {
     
     return (
-    <div class="container" onClick={() => alert(props.alert)}>
-        <img src={Logo} alt="Frozen coffee shake"/>
-        <h1>{props.title}</h1>
+    <div class="padding">
+        <div class="container" onClick={() => alert(props.alert)}>
+            <img src={Logo} alt="Frozen coffee shake"/>
+            <h1>{props.title}</h1>
+        </div>
     </div>
     )
 }
