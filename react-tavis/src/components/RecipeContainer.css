@@ -1,6 +1,10 @@
 .bigbox {
-    width: 150em;
-    height: 400em;
-    background-color: red;
-    border-radius: 15px;
+    margin: 0 auto;
+    overflow:auto;
+    width: 60vw;
+    min-height: 100vh;
+    background-color: darkgray;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
 }

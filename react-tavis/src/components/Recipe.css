@@ -1,8 +1,15 @@
+.padding {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    margin: 10px auto;
+}
+
 .container {
     width: 15em;
     height: 20em;
     background-color: lightgray;
     border-radius: 15px;
+    float: left;
 }
 
     .container img {
