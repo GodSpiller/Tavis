@@ -1,0 +1,6 @@
+.bigbox {
+    width: 150em;
+    height: 400em;
+    background-color: red;
+    border-radius: 15px;
+}

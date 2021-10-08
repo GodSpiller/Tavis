@@ -1,12 +1,14 @@
 import React from 'react';
-import Logo from './temp.png'
+import Logo from '../images/temp.png'
+import './Recipe.css'
 
-function Recipe () {
-
+function Recipe (props) {
+    
     return (
-        <div>
-            <img src={Logo} alt="Frozen coffee shake" width="290" height="300"></img>
-        </div>
+    <div class="container" onClick={() => alert(props.alert)}>
+        <img src={Logo} alt="Frozen coffee shake"/>
+        <h1>{props.title}</h1>
+    </div>
     )
 }
 
