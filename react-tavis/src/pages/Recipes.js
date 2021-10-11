@@ -1,9 +1,9 @@
 
 import React from 'react';
-import RecipeContainer from '../components/RecipeContainer'
+import CardContainer from '../components/cardContainer/CardContainer'
 
 const Recipes = () => {
-  return <RecipeContainer />
+  return <CardContainer />
 };
   
 export default Recipes;
