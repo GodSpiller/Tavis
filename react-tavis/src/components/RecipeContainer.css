@@ -1,0 +1,18 @@
+.background {
+    margin: 0 auto;
+    width: 70vw;
+    min-height: calc(100vh - 56px);
+    background-color: darkkhaki;
+    margin: 0 auto;
+    overflow:auto;
+    width: 60vw;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+@media (max-width: 767px) {
+    .background {
+        width: 100vw;
+    }
+}

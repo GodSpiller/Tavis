@@ -4,21 +4,22 @@
     margin: 10px auto;
 }
 
-.wrap {
+.box {
     width: 15em;
     height: 20em;
-    background-color: lightgray;
+    background-color: white;
     border-radius: 15px;
     float: left;
 }
 
-    .container img {
+    .box img {
         border-top-left-radius: 15px;
         border-top-right-radius: 15px;
         width: 100%;
         height: 70%;
     }
 
-    .container h1 {
+    .box h1 {
         text-align: center;
+        margin-top: 0.5em;
     }

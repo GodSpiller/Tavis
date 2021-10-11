@@ -1,7 +1,6 @@
 
 import React from 'react';
-
-import RecipeContainer from '../components/RecipeContainer.js'
+import RecipeContainer from '../components/RecipeContainer'
 
 const Recipes = () => {
   return <RecipeContainer />
