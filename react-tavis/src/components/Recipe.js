@@ -6,7 +6,7 @@ function Recipe (props) {
     
     return (
     <div class="padding">
-        <div class="container" onClick={() => alert(props.alert)}>
+        <div class="wrap" onClick={() => alert(props.alert)}>
             <img src={Logo} alt="Frozen coffee shake"/>
             <h1>{props.title}</h1>
         </div>
