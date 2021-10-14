@@ -16,4 +16,5 @@ for vare in getTilbud('7m6-gh4l'):
         if similar(food, vare) > temp:
             highestSimilarity = food
             temp = similar(food, vare)
-    print("{tilbudsvare} = {fodevare} - {lighed}".format(tilbudsvare = vare, fodevare = highestSimilarity, lighed = temp))
+    if temp >= 0.6:
+        print("{tilbudsvare} = {fodevare} - {lighed}".format(tilbudsvare = vare, fodevare = highestSimilarity, lighed = temp))
