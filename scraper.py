@@ -4,6 +4,16 @@ from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
 
+def getTilbud(catalogId):
+    link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
+        catId = catalogId
+    )
+    response = json.loads(requests.get(link).text)
+
+    tilbud = []
+    for offer in response:
+        tilbud.append(offer['offer']['heading'])
+    return tilbud
 
 def scraper(catalogId):
     link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
@@ -25,8 +35,6 @@ def recipeScraper(list):
         listOfUnits = []
         listOfIngredients = []
         
-        
-
         print(url)
         for li in r_parse.find_all('li', {"class" : "components"}):
             for span in li.find_all('span'):
@@ -43,11 +51,7 @@ def recipeScraper(list):
                 listOfIngredients.append(tempList[i])
 
         print(listOfIngredients)
-            
-            
-
-               
-            
+              
 def getAllCatalogs(url):
     rp.set_url(url)
     rp.read()
@@ -93,5 +97,5 @@ urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
 #getAllCatalogs(urllink)
 #print(getAllRecipes(urllink2))
-recipeScraper(getAllRecipes(urllink2))
+#recipeScraper(getAllRecipes(urllink2))
 #recipeScraper(["https://mummum.dk/spaghetti-bolognese/", "https://mummum.dk/lakseret/"])
