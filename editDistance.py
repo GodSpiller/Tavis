@@ -17,8 +17,6 @@ nlp = spacy.load('da_core_news_lg')
 '''
 for vare in getTilbud('7m6-gh4l'):
     temp = 0
-    #count = 0
-
     token1 = nlp(vare.lower())
     
     for food in sheet1['Navn'].tolist():
@@ -29,8 +27,6 @@ for vare in getTilbud('7m6-gh4l'):
         if token1.similarity(token2) > temp:
             highestSimilarity = tempStr[0] #sheet1['gruppe'].tolist()[count]
             temp = token1.similarity(token2)
-            #print("{tilbudsvare} = {fodevare} - {lighed}".format(tilbudsvare = vare, fodevare = highestSimilarity, lighed = temp))
-        #count += 1
     if temp >= 0.6:
         print("{tilbudsvare} = {fodevare} - {lighed}".format(tilbudsvare = vare, fodevare = highestSimilarity, lighed = temp))
 '''
@@ -64,11 +60,6 @@ for ingredient in templist[0]:
     #    print(token.text, token.pos_)
 
     print("{ingred} = {fodevare} - {lighed}".format(ingred = ingredient, fodevare = bestMatch, lighed = bestSimScore))
-
-
-
-
-
 
 '''
 for ingredient in templist[0]:
