@@ -3,19 +3,22 @@ import spacy
 from scraper import getAllCatalogs, getTilbud, scraper, recipeScraper, getAllRecipes
 from difflib import SequenceMatcher
 
-def findNouns(productName):
-    temp = productName.text
+def splitProducts(productName):
+    temp = productName
     splitProduct = temp.replace(" eller ", ",").split(",")
 
+    print(productName + " : " + str(splitProduct))
 
-    print(productName.text + " : " + str(splitProduct))
+    return splitProduct
 
-    nounIndices = ""
-    for token in productName:
+def findNouns(productName):
+    noun = ""
+
+    for token in nlp(productName):
         if token.pos_ == 'NOUN' or token.pos == 'PROPN':
-            nounIndices = nounIndices + " " + token.text
-            
-    return nounIndices
+            noun = noun + token.text
+
+    return noun
         #print(productName.text + " : " + token.text, token.dep_, token.head.text, token.head.pos_, [child for child in token.children])
 
 def inVocab(tokens):
@@ -25,24 +28,30 @@ def inVocab(tokens):
     return True
 
 def computeSimilarities():
+    count = 0
     for vare in getTilbud('7m6-gh4l'):
         similarityScore = 0
-
-        cleanVare = nlp(findNouns(nlp(vare)).lower()) 
         bestMatch = ""
+       
+        #for el in splitProducts(vare):
+        cleanVare = nlp(findNouns(vare))
 
-        
         for food in sheet1['Navn'].tolist():
             cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
 
             #if inVocab(cleanVare) and inVocab(cleanFood):
+            
             tempSim = cleanVare.similarity(cleanFood)
 
             if tempSim > similarityScore:
                 similarityScore = tempSim
                 bestMatch = cleanFood.text
-        if similarityScore > 0.7:
+        if similarityScore > 0.1:
             print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
+            if similarityScore > 0.7:
+                count += 1
+                print(count)
+                
 
 
 nlp = spacy.load('da_core_news_lg')
