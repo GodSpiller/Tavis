@@ -5,17 +5,9 @@ from difflib import SequenceMatcher
 
 def findNouns(productName):
     temp = productName.text
-    splitProduct = []
-    if "," in temp:
-        t1 = temp.split(",")
-        splitProduct.append(t1)
-        for n in splitProduct:
-            if "eller" in n:
-                splitProduct.remove(n)
-                splitProduct.append(n.split('eller'))
-    elif "eller" in temp:
-        splitProduct.append(temp.split("eller"))
-    
+    splitProduct = temp.replace(" eller ", ",").split(",")
+
+
     print(productName.text + " : " + str(splitProduct))
 
     nounIndices = ""
@@ -51,6 +43,7 @@ def computeSimilarities():
                 bestMatch = cleanFood.text
         if similarityScore > 0.7:
             print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
+
 
 nlp = spacy.load('da_core_news_lg')
 
