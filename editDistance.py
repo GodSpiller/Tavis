@@ -4,9 +4,23 @@ from scraper import getAllCatalogs, getTilbud, scraper, recipeScraper, getAllRec
 from difflib import SequenceMatcher
 
 def findNouns(productName):
+    temp = productName.text
+    splitProduct = []
+    if "," in temp:
+        t1 = temp.split(",")
+        splitProduct.append(t1)
+        for n in splitProduct:
+            if "eller" in n:
+                splitProduct.remove(n)
+                splitProduct.append(n.split('eller'))
+    elif "eller" in temp:
+        splitProduct.append(temp.split("eller"))
+    
+    print(productName.text + " : " + str(splitProduct))
+
     nounIndices = ""
     for token in productName:
-        if token.pos_ == 'NOUN':
+        if token.pos_ == 'NOUN' or token.pos == 'PROPN':
             nounIndices = nounIndices + " " + token.text
             
     return nounIndices
@@ -14,9 +28,29 @@ def findNouns(productName):
 
 def inVocab(tokens):
     for token in tokens:
-        if token.is_oov == True:
+        if token.is_oov:
             return False
     return True
+
+def computeSimilarities():
+    for vare in getTilbud('7m6-gh4l'):
+        similarityScore = 0
+
+        cleanVare = nlp(findNouns(nlp(vare)).lower()) 
+        bestMatch = ""
+
+        
+        for food in sheet1['Navn'].tolist():
+            cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
+
+            #if inVocab(cleanVare) and inVocab(cleanFood):
+            tempSim = cleanVare.similarity(cleanFood)
+
+            if tempSim > similarityScore:
+                similarityScore = tempSim
+                bestMatch = cleanFood.text
+        if similarityScore > 0.7:
+            print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
 
 nlp = spacy.load('da_core_news_lg')
 
@@ -26,23 +60,8 @@ sheet1 = pd.read_excel(xl_file)
 urllink = "https://etilbudsavis.dk/discover/groceries"
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
-print("vi starter nu")
+computeSimilarities()
 
-for vare in getTilbud('7m6-gh4l'):
-    similarityScore = 0
-    cleanVare = nlp(findNouns(nlp(vare)).lower()) 
-    bestMatch = ""
-    for food in sheet1['Navn'].tolist():
-        cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
-
-        #if inVocab(cleanVare) and inVocab(cleanFood):
-        tempSim = cleanVare.similarity(cleanFood)
-
-        if tempSim > similarityScore:
-            similarityScore = tempSim
-            bestMatch = cleanFood.text
-
-    print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
 
 
         
