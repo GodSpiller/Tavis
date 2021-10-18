@@ -37,8 +37,8 @@ def computeSimilarities():
         cleanVare = nlp(findNouns(vare))
 
         for food in sheet1['Navn'].tolist():
-            cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
-
+            #cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
+            cleanFood = nlp(food.replace(',', '').lower().split(" ")[0])
             #if inVocab(cleanVare) and inVocab(cleanFood):
             
             tempSim = cleanVare.similarity(cleanFood)
@@ -49,6 +49,7 @@ def computeSimilarities():
         if similarityScore > 0.1:
             print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
             if similarityScore > 0.7:
+                #print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
                 count += 1
                 print(count)
                 
