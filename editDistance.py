@@ -14,12 +14,14 @@ def splitProducts(productName):
 def findNouns(productName):
     noun = ""
 
-    for token in nlp(productName):
-        if token.pos_ == 'NOUN' or token.pos == 'PROPN':
-            noun = noun + token.text
+    for token in nlp(productName.lower()):
+        if token.pos_ == 'NOUN':
+            if noun == "":
+                noun = noun + token.text 
+            else:
+                noun = (noun + " " + token.text)
 
-    return noun
-        #print(productName.text + " : " + token.text, token.dep_, token.head.text, token.head.pos_, [child for child in token.children])
+    return noun.lower()
 
 def inVocab(tokens):
     for token in tokens:
@@ -30,30 +32,29 @@ def inVocab(tokens):
 def computeSimilarities():
     count = 0
     for vare in getTilbud('7m6-gh4l'):
-        similarityScore = 0
-        bestMatch = ""
        
-        #for el in splitProducts(vare):
-        cleanVare = nlp(findNouns(vare))
+        for el in splitProducts(vare):
+            similarityScore = 0
+            bestMatch = ""
+            cleanVare = nlp(findNouns(el))
 
-        for food in sheet1['Navn'].tolist():
-            #cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
-            cleanFood = nlp(food.replace(',', '').lower().split(" ")[0])
-            #if inVocab(cleanVare) and inVocab(cleanFood):
-            
-            tempSim = cleanVare.similarity(cleanFood)
+            for food in sheet1['Navn'].tolist():
+                #cleanFood = nlp(food.replace(', rå', '').replace(',', '').lower())
+                cleanFood = nlp(food.replace(',', '').lower().split(" ")[0])
+                #if inVocab(cleanVare) and inVocab(cleanFood):
+                
+                tempSim = cleanVare.similarity(cleanFood)
 
-            if tempSim > similarityScore:
-                similarityScore = tempSim
-                bestMatch = cleanFood.text
-        if similarityScore > 0.1:
+                if tempSim > similarityScore:
+                    similarityScore = tempSim
+                    bestMatch = cleanFood.text
+
             print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
             if similarityScore > 0.7:
                 #print(cleanVare.text + " : " + bestMatch + " similarity = " + str(similarityScore))
                 count += 1
                 print(count)
                 
-
 
 nlp = spacy.load('da_core_news_lg')
 
