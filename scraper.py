@@ -16,6 +16,8 @@ def scraper(catalogId):
         print(offer['offer']['pricing']['price'])
 
 def recipeScraper(list):
+    listOfLists = []
+
     for url in list:
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
@@ -24,6 +26,8 @@ def recipeScraper(list):
         listOfAmount = []
         listOfUnits = []
         listOfIngredients = []
+        
+        #print(url)
         for li in r_parse.find_all('li', {"class" : "components"}):
             for span in li.find_all('span'):
                 tempList.append(span.text)
@@ -38,11 +42,9 @@ def recipeScraper(list):
             if (i % 3 == 2): #2 == ingredients
                 listOfIngredients.append(tempList[i])
 
-
-        if(r_parse.find('li', {"class" : "components"}) != None):
-            print(url)
-            print(listOfIngredients)
-            print("\n\r")            
+        listOfLists.append(listOfIngredients)
+        sleep(1)
+    return listOfLists            
             
 
                
