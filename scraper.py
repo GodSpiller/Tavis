@@ -4,7 +4,7 @@ from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
 
-"""bannedList = [
+bannedList = [
     "https://mummum.dk/shop/kogebog-mummums-hverdagsfavoritter/",
     "https://mummum.dk/category/opskrifter/drikkevarer/",
     "https://mummum.dk/madplaner/",
@@ -21,7 +21,38 @@ from requests.models import Response
     "https://mummum.dk/kontakt/",
     "https://mummum.dk/pastaretter/",
     "https://mummum.dk/?page_id=6473",
-    "https://mummum.dk/?p=4599"]"""
+    "https://mummum.dk/?p=4599",
+    "https://mummum.dk/opskrifter/",
+    "https://mummum.dk/opskrifter/morgenmad-og-brunch/",
+    "https://mummum.dk/opskrifter/bagvaerk/",
+    "https://mummum.dk/opskrifter/frokost/",
+    "https://mummum.dk/opskrifter/dyppelse/",
+    "https://mummum.dk/opskrifter/aftensmad/",
+    "https://mummum.dk/opskrifter/salater-og-tilbehoer/",
+    "https://mummum.dk/opskrifter/soede-sager/",
+    "https://mummum.dk/opskrifter/sundere-alternativer/",
+    "https://mummum.dk/opskrifter/tapas/",
+    "https://mummum.dk/opskrifter/aftensmad/grillmad/",
+    "https://mummum.dk/opskrifter/aftensmad/graesk-mad/",
+    "https://mummum.dk/opskrifter/aftensmad/mexicansk-mad/",
+    "https://mummum.dk/opskrifter/aftensmad/italiensk-mad/",
+    "https://mummum.dk/opskrifter/aftensmad/asiatisk-mad/",
+    "https://mummum.dk/opskrifter/aftensmad/burger/",
+    "https://mummum.dk/opskrifter/aftensmad/dansk-mad/",
+    "https://mummum.dk/opskrifter/aftensmad/frikadeller/",
+    "https://mummum.dk/opskrifter/aftensmad/gryderetter/",
+    "https://mummum.dk/opskrifter/aftensmad/lasagne/",
+    "https://mummum.dk/opskrifter/aftensmad/one-pot-retter/",
+    "https://mummum.dk/opskrifter/aftensmad/pastaretter/",
+    "https://mummum.dk/opskrifter/aftensmad/pizza/",
+    "https://mummum.dk/opskrifter/aftensmad/retter-i-fad/",
+    "https://mummum.dk/opskrifter/aftensmad/supper/",
+    "https://mummum.dk/opskrifter/aftensmad/taerter/",
+    "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-fisk/",
+    "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-fjerkrae/",
+    "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-oksekoed/",
+    "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-svinekoed/",
+    "https://mummum.dk/kylling-i-svampesauce-med-rodfrugtmos/"]
 
 def scraper(catalogId):
     link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
@@ -41,14 +72,18 @@ def recipeScraper(list):
         r_parse = BeautifulSoup(r.content, "html.parser")
 
         tempList = []
+        listOfTitles = []
         listOfAmount = []
         listOfUnits = []
         listOfIngredients = []
-        print(url)
+
+        #print('"', url, '",')
         if not r_parse.find('h3', text="Ingrediensliste"):
-            print("skip")
+            #print("skip")
             sleep(0.1)
         else:
+            listOfTitles.append(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
+            print(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
             for li in r_parse.find_all('li', {"class" : "components"}):
                 for span in li.find_all('span'):
                     tempList.append(span.text)
@@ -66,6 +101,7 @@ def recipeScraper(list):
 
             listOfLists.append(listOfIngredients)
             sleep(1)
+
     return listOfLists              
                        
 def getAllCatalogs(url):
@@ -99,12 +135,13 @@ def getAllRecipes(url):
 
     for link in r_parse.find_all('a'):
         href = link.get('href')
-        if href != None and "https://mummum.dk/" in href and href not in listOfSites: # and "https://mummum.dk/opskrifter/" not in href and "https://mummum.dk/ingredienser/" not in href and href not in bannedList:    
+        if href != None and "https://mummum.dk/" in href and href not in listOfSites and href not in bannedList:   
             listOfSites.append(link.get('href'))
             #print(link)
             #print(link.name)
 
-    return listOfSites
+    recipeScraper(listOfSites)
+    #return listOfSites
 
 rp=RobotFileParser()
 
