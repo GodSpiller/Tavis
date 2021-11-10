@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
+from database import connectToDB
+import psycopg2
 
 bannedList = [
     "https://mummum.dk/shop/kogebog-mummums-hverdagsfavoritter/",
@@ -56,24 +58,27 @@ bannedList = [
 
 
 def recipeScraper(list):
-    listOfLists = []
+    listOfTitles = []
+    listOfTime = []
+    listOfAmount = [],[]
+    listOfUnits = [],[]
+    listOfIngredients = [],[]
+    count = 0
+
 
     for url in list:
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
 
         tempList = []
-        listOfTitles = []
-        listOfAmount = []
-        listOfUnits = []
-        listOfIngredients = []
 
         #print('"', url, '",')
-        if not r_parse.find('h3', text="Ingrediensliste"):
+        if not r_parse.find('h3', text="Ingrediensliste"):                                  #Looks for title with ID="Ingrediensliste"
             #print("skip")
             sleep(0.1)
-        else:
+        else:                                                                               #if ID="Ingrediensliste" is found
             listOfTitles.append(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
+            listOfTime.append(r_parse.find())                                               #Find samlet tid------------------------------------------------------------------------
             print(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
             for li in r_parse.find_all('li', {"class" : "components"}):
                 for span in li.find_all('span'):
@@ -83,17 +88,19 @@ def recipeScraper(list):
                 
             for i in range(len(tempList)):
                 if (i % 3 == 0): #0 == amount
-                    listOfAmount.append(tempList[i])
+                    listOfAmount[count].append(tempList[i])
                 if (i % 3 == 1): #1 == units
-                    listOfUnits.append(tempList[i])
+                    listOfUnits[count].append(tempList[i])
                 if (i % 3 == 2): #2 == ingredients
-                    listOfIngredients.append(tempList[i])
+                    listOfIngredients[count].append(tempList[i])
             print(tempList)
 
-            listOfLists.append(listOfIngredients)
-            sleep(1)
+            
+            sleep(1)  
 
-    return listOfLists              
+        count += 1
+
+                     
 
 def getAllRecipes(url):
     rp.set_url(url)
@@ -112,16 +119,34 @@ def getAllRecipes(url):
             #print(link)
             #print(link.name)
 
-    recipeScraper(listOfSites)
+    return listOfSites
     #return listOfSites
 
-rp=RobotFileParser()
+def uploadToDB(list):
+    sql = """INSERT INTO """
+    try:
+        # read database configuration
+        #params = config()
+        # connect to the PostgreSQL database
+        conn = connectToDB()
+        # create a new cursor
+        cur = conn.cursor()
+        # execute the INSERT statement
+        cur.executemany(sql,list)
+        # commit the changes to the database
+        conn.commit()
+        # close communication with the database
+        cur.close()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print(error)
+    finally:
+        if conn is not None:
+            conn.close()
 
+rp=RobotFileParser()
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
-#getAllCatalogs(urllink)
-#hyplink = getAllRecipes(urllink2)
 
-rec = recipeScraper(getAllRecipes(urllink2))
 
-#recipeScraper(["https://mummum.dk/spaghetti-bolognese/", "https://mummum.dk/lakseret/"])
+
+recipeScraper(getAllRecipes(urllink2))
