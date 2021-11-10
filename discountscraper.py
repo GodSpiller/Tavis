@@ -1,8 +1,34 @@
-import requests, json
+import requests, json, database
+import psycopg2
+from sshtunnel import SSHTunnelForwarder
 from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
+
+def connectToDb():
+    try:
+        with SSHTunnelForwarder(
+            ('10.92.0.161', 22),
+            ssh_private_key="SSHKey.pem",
+            ssh_username="ubuntu",
+            remote_bind_address=('localhost', 5432)) as server:
+            
+            server.start()
+            print("server connected")
+
+            print(server.local_bind_port)
+            conn = psycopg2.connect(
+                host = 'localhost',
+                port = server.local_bind_port,
+                user = 'postgres',
+                password = 'tavis',
+                database = 'tavis')
+                
+            return conn
+          
+    except:
+        print("Connection Failed")
 
 def scraper(catalogId):
     link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
@@ -46,4 +72,6 @@ def getAllCatalogs(url):
 rp=RobotFileParser()
 urllink = "https://etilbudsavis.dk/discover/groceries"
 
-getAllCatalogs(urllink)
+cur = connectToDb().cursor()
+
+cur.execute("SELECT * FROM chains")
