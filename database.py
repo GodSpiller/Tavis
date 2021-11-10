@@ -19,13 +19,11 @@ def connectToDB():
             port=ssh_tunnel.local_bind_port,
             user='postgres',
             password='tavis',
-            database='tavis'
+            database='tavis2'
         )
 
     except:
         print('Connection Has Failed...') 
     
     return conn
-
-
 
