@@ -157,8 +157,7 @@ def recipeScraper(urls):
     return recipes 
 
 def getAllRecipes(urls, listOfSitesFound):
-    #print("starting to crawl")
-    WantToCrawl = []
+    wantToCrawl = []
     for url in urls:
         rp.set_url(url)
         rp.read() 
@@ -166,24 +165,20 @@ def getAllRecipes(urls, listOfSitesFound):
         r=requests.get(url)
         r_parse = BeautifulSoup(r.text, "html.parser")
 
-        for link in r_parse.find_all('a'):
-            href = link.get('href')
-            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound:   
-                if "?page" in href and href not in listOfSitesFound:
-                    WantToCrawl.append(href)
-                listOfSitesFound.append(href)
+        for link in r_parse.find_all('a'):                                                      #Finds all links in url
+            href = link.get('href')                                                             #Extracts link from html class
+            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound:  #Ensures that crawler stays on mummum.dk and not visits the same site twice
+                if "?page" in href and href not in listOfSitesFound:                            #Checks if href is a link the crawler should crawl
+                    wantToCrawl.append(href)                                                    #Add href to wantToCrawl list
+                listOfSitesFound.append(href)                                                   #Add href to lsitOfSitesFound
 
-
-        #recipeScraper(listOfSitesFound)
-        #return listOfSitesFound
-    #print(WantToCrawl)
-    if bool(WantToCrawl): # If empty == false
-        getAllRecipes(WantToCrawl,listOfSitesFound)
+    if wantToCrawl:                                                                       # If empty == false
+        getAllRecipes(wantToCrawl,listOfSitesFound)
     else:
         return listOfSitesFound
 
 rp=RobotFileParser()
 
-urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
+urllink2 = "https://mummum.dk/opskrifter"
 rec = recipeScraper(getAllRecipes([urllink2], []))
 
