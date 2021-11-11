@@ -4,6 +4,7 @@ from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
 
+'''
 bannedList = [
     "https://mummum.dk/shop/kogebog-mummums-hverdagsfavoritter/",
     "https://mummum.dk/category/opskrifter/drikkevarer/",
@@ -54,6 +55,7 @@ bannedList = [
     "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-svinekoed/",
     "https://mummum.dk/kylling-i-svampesauce-med-rodfrugtmos/"
 ]
+'''
 
 def recipeScraper(urls):
     recipes = []
@@ -152,9 +154,6 @@ def recipeScraper(urls):
         else:
             sleep(0.1)
 
-        break
-
-
     return recipes 
 
 def getAllRecipes(urls, listOfSitesFound):
@@ -169,7 +168,7 @@ def getAllRecipes(urls, listOfSitesFound):
 
         for link in r_parse.find_all('a'):
             href = link.get('href')
-            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound and href not in bannedList:   
+            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound:   
                 if "?page" in href and href not in listOfSitesFound:
                     WantToCrawl.append(href)
                 listOfSitesFound.append(href)
@@ -183,28 +182,8 @@ def getAllRecipes(urls, listOfSitesFound):
     else:
         return listOfSitesFound
 
-"""
-def getAllRecipes(url):
-    rp.set_url(url)
-    rp.read() 
-    
-    r=requests.get(url)
-    r_parse = BeautifulSoup(r.text, "html.parser")
-
-    urls = []    
-
-    for link in r_parse.find_all('a'):
-        href = link.get('href')
-        if href != None and "https://mummum.dk/" in href and href not in urls and href not in bannedList:   
-            urls.append(href)
-
-    recipeScraper(urls)
-"""
-
 rp=RobotFileParser()
 
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
-#rec = recipeScraper(getAllRecipes(urllink2))
-
-recipeScraper(['https://mummum.dk/tomatsuppe-med-bacon/'])
+rec = recipeScraper(getAllRecipes([urllink2], []))
 
