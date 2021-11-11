@@ -1,6 +1,7 @@
 import pandas as pd
 import spacy
-from scraper import getAllCatalogs, getTilbud, scraper, recipeScraper, getAllRecipes
+from discountscraper import getAllCatalogs, getTilbud, scraper
+from recipescraper import recipeScraper, getAllRecipes
 from difflib import SequenceMatcher
 
 def splitProducts(productName):
