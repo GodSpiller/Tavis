@@ -62,19 +62,17 @@ def recipeScraper(list):
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
 
-        tempList = []
-        listOfTitles = []
-        listOfAmount = []
-        listOfUnits = []
-        listOfIngredients = []
+        if r_parse.find('h3', text="Ingrediensliste"):
+            tempList = []
+            listOfTitles = []
+            listOfAmount = []
+            listOfUnits = []
+            listOfIngredients = []
 
-        #print('"', url, '",')
-        if not r_parse.find('h3', text="Ingrediensliste"):
-            #print("skip")
-            sleep(0.1)
-        else:
+            temp = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
+            
             listOfTitles.append(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
-            print(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
+
             for li in r_parse.find_all('li', {"class" : "components"}):
                 for span in li.find_all('span'):
                     tempList.append(span.text)
@@ -88,10 +86,12 @@ def recipeScraper(list):
                     listOfUnits.append(tempList[i])
                 if (i % 3 == 2): #2 == ingredients
                     listOfIngredients.append(tempList[i])
-            print(tempList)
+                
 
             listOfLists.append(listOfIngredients)
             sleep(1)
+        else:
+            sleep(0.1)
 
     return listOfLists              
 
@@ -102,26 +102,18 @@ def getAllRecipes(url):
     r=requests.get(url)
     r_parse = BeautifulSoup(r.text, "html.parser")
 
-    listOfSites = []   
-    
+    listOfSites = []    
 
     for link in r_parse.find_all('a'):
         href = link.get('href')
         if href != None and "https://mummum.dk/" in href and href not in listOfSites and href not in bannedList:   
-            listOfSites.append(link.get('href'))
-            #print(link)
-            #print(link.name)
+            listOfSites.append(href)
 
     recipeScraper(listOfSites)
-    #return listOfSites
 
 rp=RobotFileParser()
 
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
 
-#getAllCatalogs(urllink)
-#hyplink = getAllRecipes(urllink2)
-
 rec = recipeScraper(getAllRecipes(urllink2))
 
-#recipeScraper(["https://mummum.dk/spaghetti-bolognese/", "https://mummum.dk/lakseret/"])
