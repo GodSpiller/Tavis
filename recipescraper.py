@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, database
 from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
@@ -62,8 +62,6 @@ def recipeScraper(urls):
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
 
-        print(url)
-
         if r_parse.find('h3', text="Ingrediensliste"):
             tempList = []
             titles = []
@@ -79,18 +77,17 @@ def recipeScraper(urls):
                     #print(span.text)
                     #listOfIngredients.append(list.text.replace('\n', ' '))
                 
-            for i in range(len(tempList)):
-                if (i % 3 == 0): #0 == amount
-                    amounts.append(tempList[i])
-                if (i % 3 == 1): #1 == units
-                    units.append(tempList[i])
-                if (i % 3 == 2): #2 == ingredients
-                    ingredients.append(tempList[i])
+            for i in range(0, len(tempList), 3):
+                amounts.append(tempList[i])
+                units.append(tempList[i + 1])
+                ingredients.append(tempList[i + 2])
 
             image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
                 
+            print(titles)
+
             recipes.append(ingredients)
-            sleep(0.1)
+            sleep(1)
         else:
             sleep(0.1)
 
