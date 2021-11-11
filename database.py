@@ -27,3 +27,11 @@ def connectToDB():
     
     return conn
 
+def insertRecipe(title, ingredients, units, amounts, instructions, img):
+    conn = connectToDB()
+    curs = conn.cursor()
+
+    curs.execute('INSERT INTO ')
+
+    curs.close()
+    conn.close()
