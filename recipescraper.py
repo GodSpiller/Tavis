@@ -93,6 +93,36 @@ def recipeScraper(urls):
 
     return recipes 
 
+def getAllRecipes(urls, listOfSitesFound):
+    #print("starting to crawl")
+    WantToCrawl = []
+    for url in urls:
+        rp.set_url(url)
+        rp.read() 
+        
+        r=requests.get(url)
+        r_parse = BeautifulSoup(r.text, "html.parser")
+
+        
+        
+
+        for link in r_parse.find_all('a'):
+            href = link.get('href')
+            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound and href not in bannedList:   
+                if "?page" in href and href not in listOfSitesFound:
+                    WantToCrawl.append(href)
+                listOfSitesFound.append(href)
+
+
+        #recipeScraper(listOfSitesFound)
+        #return listOfSitesFound
+    #print(WantToCrawl)
+    if bool(WantToCrawl): # If empty == false
+        getAllRecipes(WantToCrawl,listOfSitesFound)
+    else:
+        return listOfSitesFound
+
+"""
 def getAllRecipes(url):
     rp.set_url(url)
     rp.read() 
@@ -108,7 +138,8 @@ def getAllRecipes(url):
             urls.append(href)
 
     recipeScraper(urls)
+"""
 
 rp=RobotFileParser()
-urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
-rec = recipeScraper(getAllRecipes(urllink2))
+urllink2 = ["https://mummum.dk/opskrifter"]
+recipeScraper(getAllRecipes(urllink2,[]))
