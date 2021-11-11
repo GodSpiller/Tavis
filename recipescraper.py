@@ -95,6 +95,7 @@ def recipeScraper(urls):
             # Preprocess ingredients into three seperate lists: item, unit and amount
             for i in range(0, len(tempList), 3):
 
+                # Remove. Probably? Or not.
                 if tempList[i + 2] == 'salt/peber':
                     continue
 
@@ -165,9 +166,6 @@ def getAllRecipes(urls, listOfSitesFound):
         
         r=requests.get(url)
         r_parse = BeautifulSoup(r.text, "html.parser")
-
-        
-        
 
         for link in r_parse.find_all('a'):
             href = link.get('href')
