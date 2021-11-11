@@ -61,98 +61,102 @@ def recipeScraper(urls):
     recipes = []
 
     for url in urls or []:
-        r=requests.get(url)
-        r_parse = BeautifulSoup(r.content, "html.parser")
+        try:
+            r=requests.get(url)
+            r_parse = BeautifulSoup(r.content, "html.parser")
 
-        if r_parse.find('h3', text="Ingrediensliste"):
-            tempList = []
-            amounts = []
-            units = []
-            ingredients = []
-            instructions = []
-            mealType = ''
-            quantity = 0
-            amountUnit = ''
-            
-            # Gets the title of the recipe
-            title = r_parse.find("h1", {"class" : "entry-title hyphen"}).text
-
-            # Number of people
-            for select in r_parse.find_all('select', { 'class' : 'single-recipe-amount'}):
-                for option in select.find_all('option', { 'selected' : 'selected' }):
-                    quantity = int(option.text)
-
-            # Gets the time it takes to make the recipe
-            time = r_parse.find("div", {"class" : "recipe-total"}).text
-            time = time.split('\t')
-            time = time[len(time) - 1]
-
-            time = utility.convertToMinutes(time)
-
-            # Finds the html with ingredients that also contains unit and amount
-            for li in r_parse.find_all('li', {"class" : "components"}):
-                for span in li.find_all('span'): #print(span.text)
-                    tempList.append(span.text) #listOfIngredients.append(list.text.replace('\n', ' '))
-
-            # Preprocess ingredients into three seperate lists: item, unit and amount
-            for i in range(0, len(tempList), 3):
-
-                # Remove. Probably? Or not.
-                if tempList[i + 2] == 'salt/peber':
-                    continue
-
-                # Normalizes the value to one person/piece
-                if tempList[i] !=  '':
-                    amounts.append(float(tempList[i].replace(',', '.')) / quantity)
-                else:
-                    amounts.append(tempList[i])
-
-                units.append(tempList[i + 1])
-                ingredients.append(tempList[i + 2])
-
-            # Instructions for the recipe
-            for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
-                for ol in div.find_all('ol'):
-                    for li in ol.find_all('li'):
-                        instructions.append(li.text)
-
-            # Type of meal (Dinner, breakfast, etc.)
-            for p in r_parse.find_all('p', { 'class' : 'breadcrumbs' }):
-                mealType = p.text
-
-            mealType = mealType.split(' / ')
-            mealType = mealType[2]
-
-            # Unit amount
-            for span in r_parse.find_all('span', { 'class' : 'recipe-amount-select'}):
-                amountUnit = span.text
-
-            amountUnit = amountUnit.replace('\t', '').split(' ')
-            amountUnit = amountUnit[len(amountUnit) - 1]
-
-            image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
+            if r_parse.find('h3', text="Ingrediensliste"):
+                tempList = []
+                amounts = []
+                units = []
+                ingredients = []
+                instructions = []
+                mealType = ''
+                quantity = 1 
+                amountUnit = ''
                 
-            print('\n\nTitle: ' + title)
-            print('Image: ' + image)
-            print('Time: ' + str(time))
-            print('Type: ' + mealType)
-            print('Unit: ' +  amountUnit)
-            print('--------Ingredients---------')
-            
-            for i in range(len(amounts)):
-                print(amounts[i], units[i], ingredients[i])
+                # Gets the title of the recipe
+                title = r_parse.find("h1", {"class" : "entry-title hyphen"}).text
 
-            print('--------Instructions---------')
+                # Number of people
+                for select in r_parse.find_all('select', { 'class' : 'single-recipe-amount'}):
+                    for option in select.find_all('option', { 'selected' : 'selected' }):
+                        quantity = int(option.text)
 
-            for i in range(len(instructions)):
-                print(i, instructions[i])
+                # Gets the time it takes to make the recipe
+                time = r_parse.find("div", {"class" : "recipe-total"}).text
+                time = time.split('\t')
+                time = time[len(time) - 1]
 
-            print('-----------------------------')
+                time = utility.convertToMinutes(time)
 
-            recipes.append(ingredients)
-            sleep(1)
-        else:
-            sleep(0.1)
+                # Finds the html with ingredients that also contains unit and amount
+                for li in r_parse.find_all('li', {"class" : "components"}):
+                    for span in li.find_all('span'): #print(span.text)
+                        tempList.append(span.text) #listOfIngredients.append(list.text.replace('\n', ' '))
+
+                # Preprocess ingredients into three seperate lists: item, unit and amount
+                for i in range(0, len(tempList), 3):
+
+                    # Remove. Probably? Or not.
+                    if tempList[i + 2] == 'salt/peber':
+                        continue
+
+                    # Normalizes the value to one person/piece
+                    if tempList[i] !=  '':
+                        amounts.append(float(tempList[i].replace(',', '.')) / quantity)
+                    else:
+                        amounts.append(tempList[i])
+
+                    units.append(tempList[i + 1])
+                    ingredients.append(tempList[i + 2])
+
+                # Instructions for the recipe
+                for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
+                    for ol in div.find_all('ol'):
+                        for li in ol.find_all('li'):
+                            instructions.append(li.text)
+
+                # Type of meal (Dinner, breakfast, etc.)
+                for p in r_parse.find_all('p', { 'class' : 'breadcrumbs' }):
+                    mealType = p.text
+
+                mealType = mealType.split(' / ')
+                mealType = mealType[2]
+
+                # Unit amount
+                for span in r_parse.find_all('span', { 'class' : 'recipe-amount-select'}):
+                    amountUnit = span.text
+
+                amountUnit = amountUnit.replace('\t', '').split(' ')
+                amountUnit = amountUnit[len(amountUnit) - 1]
+
+                image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
+                    
+                print('\n\nTitle: ' + title)
+                print('Image: ' + image)
+                print('Time: ' + str(time))
+                print('Type: ' + mealType)
+                print('Unit: ' +  amountUnit)
+                print('--------Ingredients---------')
+                
+                for i in range(len(amounts)):
+                    print(amounts[i], units[i], ingredients[i])
+
+                print('--------Instructions---------')
+
+                for i in range(len(instructions)):
+                    print(i, instructions[i])
+
+                print('-----------------------------')
+
+                recipes.append(ingredients)
+                sleep(1)
+            else:
+                sleep(0.1)
+        except:
+            print(url)
+        
 
     return recipes 
 
