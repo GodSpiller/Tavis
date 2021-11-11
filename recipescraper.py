@@ -174,11 +174,9 @@ def getAllRecipes(urls, listOfSitesFound):
 
     if wantToCrawl:                                                                       # If empty == false
         getAllRecipes(wantToCrawl,listOfSitesFound)
-    else:
-        return listOfSitesFound
+    return listOfSitesFound
 
 rp=RobotFileParser()
 
 urllink2 = "https://mummum.dk/opskrifter"
 rec = recipeScraper(getAllRecipes([urllink2], []))
-
