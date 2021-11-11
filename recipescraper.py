@@ -52,26 +52,26 @@ bannedList = [
     "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-fjerkrae/",
     "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-oksekoed/",
     "https://mummum.dk/opskrifter/aftensmad/tilberedning-af-svinekoed/",
-    "https://mummum.dk/kylling-i-svampesauce-med-rodfrugtmos/"]
+    "https://mummum.dk/kylling-i-svampesauce-med-rodfrugtmos/"
+]
 
+def recipeScraper(urls):
+    recipes = []
 
-def recipeScraper(list):
-    listOfLists = []
-
-    for url in list:
+    for url in urls or []:
         r=requests.get(url)
         r_parse = BeautifulSoup(r.content, "html.parser")
 
+        print(url)
+
         if r_parse.find('h3', text="Ingrediensliste"):
             tempList = []
-            listOfTitles = []
-            listOfAmount = []
-            listOfUnits = []
-            listOfIngredients = []
-
-            temp = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
+            titles = []
+            amounts = []
+            units = []
+            ingredients = []
             
-            listOfTitles.append(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
+            titles.append(r_parse.find("h1", {"class" : "entry-title hyphen"}).text)
 
             for li in r_parse.find_all('li', {"class" : "components"}):
                 for span in li.find_all('span'):
@@ -81,19 +81,20 @@ def recipeScraper(list):
                 
             for i in range(len(tempList)):
                 if (i % 3 == 0): #0 == amount
-                    listOfAmount.append(tempList[i])
+                    amounts.append(tempList[i])
                 if (i % 3 == 1): #1 == units
-                    listOfUnits.append(tempList[i])
+                    units.append(tempList[i])
                 if (i % 3 == 2): #2 == ingredients
-                    listOfIngredients.append(tempList[i])
-                
+                    ingredients.append(tempList[i])
 
-            listOfLists.append(listOfIngredients)
-            sleep(1)
+            image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
+                
+            recipes.append(ingredients)
+            sleep(0.1)
         else:
             sleep(0.1)
 
-    return listOfLists              
+    return recipes 
 
 def getAllRecipes(url):
     rp.set_url(url)
@@ -102,18 +103,15 @@ def getAllRecipes(url):
     r=requests.get(url)
     r_parse = BeautifulSoup(r.text, "html.parser")
 
-    listOfSites = []    
+    urls = []    
 
     for link in r_parse.find_all('a'):
         href = link.get('href')
-        if href != None and "https://mummum.dk/" in href and href not in listOfSites and href not in bannedList:   
-            listOfSites.append(href)
+        if href != None and "https://mummum.dk/" in href and href not in urls and href not in bannedList:   
+            urls.append(href)
 
-    recipeScraper(listOfSites)
+    recipeScraper(urls)
 
 rp=RobotFileParser()
-
 urllink2 = "https://mummum.dk/opskrifter/aftensmad/"
-
 rec = recipeScraper(getAllRecipes(urllink2))
-
