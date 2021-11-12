@@ -182,5 +182,14 @@ def getAllRecipes(urls, listOfSitesFound):
 
 rp=RobotFileParser()
 
-urllink2 = "https://mummum.dk/opskrifter"
-rec = recipeScraper(getAllRecipes([urllink2], []))
+#Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
+urllink1 = ["https://mummum.dk/opskrifter/morgenmad-og-brunch/",
+            "https://mummum.dk/opskrifter/frokost/",
+            "https://mummum.dk/opskrifter/aftensmad/",
+            "https://mummum.dk/opskrifter/salater-og-tilbehoer/"]
+
+#Alle opskrifter
+urllink2 = ["https://mummum.dk/opskrifter"] 
+
+
+recipeScraper(getAllRecipes(urllink1, []))
