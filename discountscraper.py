@@ -49,12 +49,3 @@ def getAllCatalogs(url):
 rp=RobotFileParser()
 urllink = "https://etilbudsavis.dk/discover/groceries"
 
-conn = database.connectToDB()
-cur = conn.cursor()
-cur.execute("SELECT * FROM chains")
-
-for row in cur.fetchall():
-    print(row[1])
-
-cur.close()
-conn.close()

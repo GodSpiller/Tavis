@@ -37,3 +37,7 @@ def insertCategories():
 
     curs.close()
     conn.close()
+
+
+insertSuperCategories()
+insertCategories()

@@ -1,4 +1,4 @@
-import requests, json, utility, database
+import requests, json, utility, database, editDistance
 from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
@@ -70,7 +70,7 @@ def recipeScraper(urls):
                 amounts = []
                 units = []
                 ingredients = []
-                instructions = []
+                instructions = ""
                 mealType = ''
                 quantity = 1 
                 amountUnit = ''
@@ -115,8 +115,9 @@ def recipeScraper(urls):
                 for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
                     for ol in div.find_all('ol'):
                         for li in ol.find_all('li'):
-                            instructions.append(li.text)
+                            instructions = instructions + "|"  + li.text
 
+                
                 # Type of meal (Dinner, breakfast, etc.)
                 for p in r_parse.find_all('p', { 'class' : 'breadcrumbs' }):
                     mealType = p.text
@@ -131,9 +132,16 @@ def recipeScraper(urls):
                 amountUnit = amountUnit.replace('\t', '').split(' ')
                 amountUnit = amountUnit[len(amountUnit) - 1]
 
-                image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[9]
-                    
-                print('\n\nTitle: ' + title)
+                image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
+
+
+                categories = database.fetch_categories()
+                for elem in ingredients:
+                    print("Spacy = " + elem + " : " + str(editDistance.compute_similarity(elem, categories)))
+                   
+                 
+
+                '''print('\n\nTitle: ' + title)
                 print('Image: ' + image)
                 print('Time: ' + str(time))
                 print('Type: ' + mealType)
@@ -143,19 +151,21 @@ def recipeScraper(urls):
                 for i in range(len(amounts)):
                     print(amounts[i], units[i], ingredients[i])
 
-                print('--------Instructions---------')
 
-                for i in range(len(instructions)):
-                    print(i, instructions[i])
+                print('--------Instructions---------')
+                print(instructions)
 
                 print('-----------------------------')
+                '''
+                #database.insertRecipe(title, instructions, image, amountUnit, time, mealType)
+                #database.insertIngredients(title, ingredients, units, amounts)
 
-                recipes.append(ingredients)
                 sleep(1)
             else:
                 sleep(0.1)
-        except:
-            print(url)
+        except Exception as e: print(e)
+
+            
         
 
     return recipes 
@@ -191,5 +201,6 @@ urllink1 = ["https://mummum.dk/opskrifter/morgenmad-og-brunch/",
 #Alle opskrifter
 urllink2 = ["https://mummum.dk/opskrifter"] 
 
+#recipeScraper(getAllRecipes(urllink1, []))
 
-recipeScraper(getAllRecipes(urllink1, []))
+recipeScraper(["https://mummum.dk/graeskarfritter/", "https://mummum.dk/brunede-kartofler/i-ovn/"])
