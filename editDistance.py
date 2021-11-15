@@ -61,34 +61,22 @@ def compute_similarity(ingredient, categories):
     similarity_score = 0
     best_match = ""
 
-    for category in categories:
-        category = nlp(category.lower().replace(",", "").replace("rå", ""))
+    for key in categories:
+        
 
-        whole_similarity = ingredient.similarity(category)
-        first_word_similarity = ingredient.similarity(category[0])
+        whole_similarity = ingredient.similarity(categories[key])
+        first_word_similarity = ingredient.similarity(categories[key][0])
 
         if whole_similarity > first_word_similarity:
             if whole_similarity > similarity_score:
                 similarity_score = whole_similarity
-                best_match = category
+                best_match = key
         else:
             if first_word_similarity > similarity_score:
                 similarity_score = first_word_similarity
-                best_match = category
+                best_match = key
         
     return best_match
-
-def sequence_match(ingredient, categories):
-    score = 0
-    best_match = ""
-    for category in categories:
-        temp_ratio = SequenceMatcher(None, ingredient, category)
-        if temp_ratio.ratio() > score:
-            score = temp_ratio.ratio()
-            best_match = category
-
-    return best_match
-
 
 nlp = spacy.load('da_core_news_lg')
 '''
