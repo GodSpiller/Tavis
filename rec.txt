@@ -1,0 +1,562 @@
+løg : Løg, ristede | 215
+svinemørbrad : Oksekød, mørbrad, afpudset, rå | 15
+bacon i tern : Makrel i tomat, konserves | 28
+cocktailpølser : Kødboller, konserves | 6
+paprika : Peber, chili, rå | 127
+smør : Smør, usaltet | 124
+hvedemel : Hvedemel, bagerimel | 208
+mælk : Sødmælk, konventionel (ikke-økologisk) | 110
+tomatpure : Tomatpure, koncentreret | 56
+madlavningsfløde : Yoghurt naturel, sødmælk | 95
+hønsebouillonterning : | 71
+ris : Ris, brune, rå | 10
+raps- eller solsikkeolie : Solsikkeolie | 215
+hvidløg : Hvidløg, rå | 295
+porre : Porre, rå | 20
+vand : Vand, drikke-, vejl. værdier | 312
+tørret oregano : Pistacienød, tørret | 31
+chiliflager : Peber, chili, konserves | 73
+grøntsagsbouillonterning : | 51
+hakkede tomater på dåse : Kikærter, tørrede, rå | 52
+creme fraiche : Dressing, creme fraiche | 76
+frisk persille : Karse, frisk | 194
+suppehorn : Tomatsuppe, spiseklar | 2
+kyllingebryst : Kylling, bryst (filet), kogt, pålæg | 112
+gulerod : Gulerod, uspec., rå | 79
+squash : Squash, rå | 28
+rødløg : Løg, ristede | 101
+bulgur : Bulgur, parboiled, rå | 14
+ribbensteg : Oksekød, mørbrad, afpudset, rå | 2
+sandwichbolle : | 1
+syltede agurker : Kirsebær, syltede | 3
+mayonnaise : Mayonnaise, fedtreduceret | 57
+syltet rødkål : Rødkål, rå | 3
+flæskestegssovs : | 1
+kartoffel : Kartoffel, uspec., rå | 79
+piskefløde : Fløde 50 % | 24
+medister : Medisterpølse, rå | 3
+laurbærblade : Koriander, blade, tørrede | 14
+peberkorn : Peber, hvid | 12
+grødris : Risengryn, grødris, brune, rå | 4
+sødmælk : Sødmælk, konventionel (ikke-økologisk) | 4
+salt : Salt, bordsalt (jodberiget) | 362
+sukker : Sukker, stødt melis (saccharose) | 1
+sukker : Sukker, stødt melis (saccharose) | 164
+stødt kanel : Kanel, stang | 13
+hel and : And, kød og skind, rå | 1
+æble : Æble, uspec., råt | 32
+svesker : Appelsinmarmelade | 1
+tørret timian : Dild, tørret | 33
+laurbærblade : Koriander, blade, tørrede | 3
+flæskesteg : Rødkål, rå | 2
+champignon : Champignon, konserves | 43
+jordskokker : Jordskok, rå | 3
+pastinak : Pastinak, rå | 3
+valnødder : Tranebær, rå | 7
+hasselnødder : Hasselnød, tørret | 11
+persille : Persille, rå | 2
+selleri : Selleri, rod, rå | 4
+syltede rødløg : Tyttebær, syltede | 18
+frisk spinat : Karse, frisk | 53
+cherrytomater : Peberfrugt, grøn, rå | 56
+frosne ærter : Grønne ærter, dybfrost | 19
+agurk : Agurk, syltet, uden tilsat sukker | 39
+saltmandler : Lakrids, salt | 11
+varmrøget laks : Laks, atlantisk, vild, rå | 12
+pikant flødeost : Flødeost, 60+ | 9
+rød peberfrugt : Peberfrugt, rød, rå | 100
+bacon i skiver : Makrel i tomat, konserves | 40
+små kartofler med skræl : Hvedebrød med fedtrige frø, store, industrifremstillet | 3
+oksebouillonterning : | 18
+cayennepeber : Peber, chili, rå | 6
+engelsk sauce : Sauce, gravad laks | 4
+frossen spinat : Spinat, rå | 8
+æg : Æg, høne, æggehvide, pasteuriseret | 216
+frisk dild : Karse, frisk | 26
+citronsaft : Citronsaft, friskpresset | 104
+rejer : Hummer, rå | 14
+lakserogn : Sauce, gravad laks | 1
+mascarpone : Flødeost, 60+ | 12
+laksefilet : Fiskefilet, paneret, friturestegt, fastfood | 17
+broccoli : Broccoli, rå | 21
+frisk pasta : Pasta, rå | 5
+citron : Citron, rå | 17
+lakseside : Sauce, gravad laks | 2
+banan : Banan, rå | 24
+mørk chokolade : Chokolade, mørk | 8
+vaniljeis : Vanilleis | 2
+friske asparges : Koriander, blade, friske | 14
+bagekartoffel : Kartoffel, uspec., rå | 8
+bladselleri : Bladselleri, rå | 7
+karry : Karry, pulver | 49
+stødt spidskommen : Spidskommen, rå | 53
+stødt koriander : Koriander, frø | 9
+majsstivelse : Majsstivelse | 11
+kokosmælk : Karry, pulver | 27
+ris : Ris, brune, rå | 33
+hel kylling : Boghvede, hel, rå | 1
+rød karrypasta : Peberfrugt, rød, rå | 3
+sød kartoffel : Batat, sød kartoffel, rå | 23
+frisk persille : Karse, frisk | 5
+nudler : Kødboller, konserves | 4
+kyllingebryst : Kylling, bryst (filet), kogt, pålæg | 5
+pankorasp : Rasp | 15
+garam masala : Karry, pulver | 1
+vand : Vand, drikke-, vejl. værdier | 8
+naanbrød : Knækbrød, fladbrød | 5
+risottoris : Pasta, rå | 6
+hvidvin : Hvidvin, Rhinskvin | 19
+parmesan : Parmesan, 32+ | 61
+serranoskinke : Skinke, kogt, konserves | 37
+frisk chili : Karse, frisk | 17
+forårsløg : Løg, ristede | 47
+pasta : Pasta, rå | 27
+fetaost : Feta, 40+ | 53
+soltørrede tomater : Kikærter, tørrede, rå | 32
+groft salt : Salt, bordsalt (jodberiget) | 3
+chilisauce : Sauce, gravad laks | 23
+hakket svinekød : Oksekød, inderlår uden kappe, rå | 12
+havregryn : Havregryn, uspec. | 69
+hakket oksekød : Oksekød, inderlår uden kappe, rå | 41
+hakkede tomater på dåse : Kikærter, tørrede, rå | 6
+frisk basilikum : Karse, frisk | 17
+spaghetti : Makaroni, spaghetti, fuldkorns-, rå | 20
+frisk ingefær : Karse, frisk | 15
+røde linser : Røde linser, tørrede, rå | 9
+creme fraiche : Dressing, creme fraiche | 27
+pølser : Pølsebrød | 4
+ketchup : Tomatketchup | 17
+purløg : Purløg, rå | 19
+pasta penne : Pasta, rå | 13
+grøn pesto : Peberfrugt, grøn, rå | 27
+gær : Gær, tørret | 120
+akaciehonning : Honning | 60
+avocado : Avocado, rå | 37
+eddike : Eddike | 20
+peber : Peber, hvid | 27
+krølsalat : | 12
+tomat : Tomat, uspec., rå | 42
+tørret basilikum : Græskarkerner, tørret | 19
+stødt muskatnød : Muskatnød, hel | 10
+frisk mozzarella : Karse, frisk | 69
+lasagneplader : Kødboller, konserves | 5
+fajita spice mix : Dressing, blue cheese | 1
+grovvalsede havregryn : Havregryn, uspec. | 4
+chiafrø : Chiafrø | 10
+neutral skyr : Skyr, 0.2 % fedt | 7
+vaniljesukker : Sukker, brunt rørsukker | 40
+peanutbutter : Chokolade, fløde | 10
+bagepulver : Bagepulver | 41
+frosne hindbær : Blåbær, frosne, usukrede | 7
+hindbær : Hindbær, rå | 3
+bagekakao : | 8
+kokosolie : Kokosolie | 10
+grahamsmel : Grahamsmel, fuldkornshvedemel | 20
+solsikkekerner : Græskarkerner, tørret | 25
+sesamfrø : Sesamfrø, hele | 29
+birkes : Birkes, frø | 4
+brombær : Brombær, rå | 3
+vaniljestang : Kanel, stang | 5
+lime : Lime, rå | 11
+tørret figen : Figen, tørret | 1
+tørret dadel : Hasselnød, tørret | 1
+husblas : Sirup | 6
+figen : Figen, tørret | 1
+lys chokolade : Tahin, lys | 1
+flormelis : Kokosmel | 22
+kakaopulver : Kakao, pulver | 1
+æggeblomme : Æg, blomme, tilsat sukker, pasteuriseret, dybfrost | 7
+hvidvinseddike : Citronsaft, friskpresset | 15
+english muffins : Dressing, blue cheese | 1
+frisk purløg : Karse, frisk | 2
+blomme : Blomme, rå | 7
+frosne jordbær : Jordbær, dybfrost, usukrede | 4
+frosne skovbær : Blåbær, frosne, usukrede | 1
+isterninger : Karameller, blandede | 6
+blåbær : Blåbær, rå | 5
+naturel yoghurt : Yoghurt naturel, sødmælk | 33
+skinketern : Skinke, kogt, konserves | 4
+tun på dåse : Tun, rå | 8
+sukkerærter : Kikærter, tørrede, rå | 5
+pastaskruer : Pasta, rå | 6
+franskbrød : Franskbrød | 4
+skinke : Skinke, kogt, konserves | 4
+cheddar : Cheddar, 50+ | 14
+dijonsennep : Sennep, brun, færdiglavet | 7
+tortillapandekager : | 8
+appelsin : Appelsin, rå | 11
+groft brød : Hvedebrød, toastbrød, groft, industrifremstillet | 1
+blandet salat : Salat, hovedsalat, rå | 10
+mayonnaise : Mayonnaise, fedtreduceret | 3
+rucola : Dild, rå | 37
+fuldkornspastaskruer : | 2
+rød pesto : Peberfrugt, rød, rå | 7
+fetaost : Feta, 40+ | 4
+fladbrød : Knækbrød, fladbrød | 2
+espressoshot : | 1
+brun farin : Sukker, brun farin | 16
+vaniljeessens : Vanilleis | 1
+Alpro Barista Havredrik : Havredrik, ikke beriget | 1
+radiser : Radise, rå | 6
+hytteost : Hytteost, 20+ | 18
+avocado : Avocado, rå | 3
+rugbrød : Rugbrød, revet, med brunt sukker, uspec. | 18
+stenbiderrogn : Stenbider, røget | 2
+California Raisins : Dressing, blue cheese | 2
+mandler : Chokolade, fløde | 26
+durummel : Hvedemel, durum | 11
+pizzasauce : Tomatsuppe, spiseklar | 23
+skinkestrimler : Skinke, kogt, konserves | 13
+pepperoni : Bacon, kogestykke, rå | 10
+mandelmel : Kokosmel | 6
+falafler : Kødboller, konserves | 1
+spidskål : Spidskål, rå | 14
+rød spidskål : Peberfrugt, rød, rå | 10
+granatæble : Granatæble, rå | 13
+ribeye : Oksekød, mørbrad, afpudset, rå | 1
+frosne edamamebønner uden bælg : Rugbrød, soft, uden fedtrige frø, uden kerner, industrifremstillet | 12
+fuldkornspasta : Rugbrød, fuldkorn, industrifremstillet | 1
+frisk mozzarella : Karse, frisk | 6
+grøn pesto : Peberfrugt, grøn, rå | 1
+frisk spinat : Karse, frisk | 6
+barbequesauce : | 1
+frisk dild : Karse, frisk | 7
+tacokrydderi : | 6
+gær : Gær, tørret | 4
+hokkaidogræskar : Græskar, rå | 4
+kartofler fra glas : Knudekål, glaskål, rå | 2
+burrata : Mozzarella, 45+ | 1
+olivenolie : Olivenolie | 74
+balsamico : Olivenolie | 3
+rodfrugtsblanding : | 7
+PUCK fetaost : Feta, 40+ | 1
+frisk timian : Karse, frisk | 5
+rødkål : Rødkål, rå | 4
+rosiner : Appelsinmarmelade | 3
+æblecidereddike : Eddike | 14
+ribsgele : Ribsgele | 6
+aubergine : Aubergine, rå | 4
+jordbær : Jordbær, rå | 5
+hvidløgspulver : Hvidløg, tørret, pulver | 1
+løgpulver : Karry, pulver | 11
+pinjekerner : Pinjekerne, tørret | 11
+butternutsquash : Squash, rå | 1
+hasselnøddeflager : Småkage, havreflager, industrifremstillet | 1
+grøn peberfrugt : Peberfrugt, grøn, rå | 5
+flæsk i skiver : Sild, marineret, i madeirasauce | 2
+tortellini med fyld af spinat og ricotta : Trekantsandwich med kylling og bacon, salat og dressing, fastfood | 2
+torsk : Torsk, filet, rå | 3
+rødvin : Rødvin, rosévin, uden alkohol | 1
+hakket kyllingefars : Spinat, hakket, dybfrost | 9
+babymajs på dåse : Pizza med fisk, tomat og ost, fastfood | 1
+ananasringe på dåse : Isvaffel med vaniljeis, uspec. | 2
+ananassaft : Ananasjuice, konserves | 1
+sweet chilisauce : Sauce, barbeque | 9
+sojasauce : Soja sauce | 10
+oksekød i tern : Grisekød i karrysovs, dybfrost | 4
+hvidkål : Hvidkål, rå | 4
+sød sennep : Batat, sød kartoffel, rå | 20
+rasp : Rasp | 22
+hel kylling : Boghvede, hel, rå | 4
+fondvand : | 1
+sovsekulør : Dressing, mayonnaise | 11
+butterdej : Roulade, abrikos | 6
+majskolber : Majskolbe, rå | 1
+rødbede : Rødbede, rå | 10
+tortillachips : Kartoffel, chips, fedtreducerede | 1
+jalapenos : Cheddar, 50+ | 8
+hamburgerryg : Hamburgerryg, røget | 1
+pastavand : Pasta, rå | 2
+pecorino : Salami | 1
+friske hvide asparges : Asparges, hvide, rå | 1
+frossen butterdejsplade : Loganbær, frosne | 1
+pebermix : | 1
+serranoskinke : Skinke, kogt, konserves | 2
+laksefilet : Fiskefilet, paneret, friturestegt, fastfood | 1
+Kerrygold cheddar : Cheddar, 50+ | 2
+salsa : Sauce, barbeque | 7
+frisk koriander : Karse, frisk | 8
+gulerod : Gulerod, uspec., rå | 4
+pulled pork : Roastbeef, pålæg | 2
+fettuccine : Makaroni, spaghetti, fuldkorns-, rå | 3
+parboiled ris : Ris, parboiled, rå | 2
+blomkål : Blomkål, uspecificeret, rå | 14
+revet mozzarella : Parmesan, revet | 5
+kyllingelår : Kylling, bryst (filet), kogt, pålæg | 1
+brune ris : Ris, brune, rå | 2
+ananas : Ananas, konserves | 2
+mango : Mango, rå | 7
+saltede peanuts : Peanuts, (jordnød, ristet og saltet) | 3
+tørret gurkemeje : Hvidløg, tørret, pulver | 6
+garam masala : Karry, pulver | 8
+tørret gurkemeje : Hvidløg, tørret, pulver | 1
+hvidløgspulver : Hvidløg, tørret, pulver | 10
+lys øl : Øl, mørkt hvidtøl | 1
+kapers : Ansjos, marineret, konserves | 1
+hvidløgsflødeost : | 5
+friske lasagneplader : Koriander, blade, friske | 3
+ricottaost : Flødeost, 60+ | 2
+svinekoteletter : Oksekød, culotte, rå | 7
+tørret timian : Dild, tørret | 1
+løg : Løg, ristede | 3
+grov tærtedej : Hvedebrød, bolle, grov, industrifremstillet | 5
+æg : Æg, høne, æggehvide, pasteuriseret | 3
+Salt/peber : Kage, trøffelprodukt / koldprodukt, industrifremstillet | 1
+rød peberfrugt : Peberfrugt, rød, rå | 7
+naturel flødeost : Yoghurt naturel, sødmælk | 8
+hvidløg : Hvidløg, rå | 3
+tørret basilikum : Græskarkerner, tørret | 1
+rødspættefilet : Fiskefilet, paneret, friturestegt, fastfood | 3
+asparges på dåse : Pizza med fisk, tomat og ost, fastfood | 5
+kogt æg : Æg, høne, kogt, dybfrost | 2
+rejevand : | 3
+pastasauce : Pasta, rå | 1
+kærnemælk : Kærnemælk | 11
+rejer : Hummer, rå | 2
+citron : Citron, rå | 1
+madlavningsfløde : Yoghurt naturel, sødmælk | 3
+hvidvin : Hvidvin, Rhinskvin | 1
+cherrytomater : Peberfrugt, grøn, rå | 2
+tun på dåse : Tun, rå | 3
+espressoshot : | 2
+hyben : Hyben, rå | 1
+glukosesirup : Sirup | 1
+instant kaffe : Kaffe, instant, decaffeinated, drikkeklar | 1
+økologisk appelsin : Skummetmælk, økologisk | 1
+frosne mangotern : Loganbær, frosne | 5
+honning : Honning | 1
+stødt kardemomme : Spidskommen, rå | 4
+pære : Pære, rå | 1
+mørk rom : Rom | 1
+økologisk citron : Skummetmælk, økologisk | 4
+frossen havtorn : Blåbær, frosne, usukrede | 1
+frosne blåbær : Blåbær, frosne, usukrede | 2
+ribs : Ribs, rå | 3
+vaniljesirup : Sirup | 1
+abrikos : Abrikos, konserves, let sukkerlage | 1
+rugmel : Rugmel, groft, fuldkornsrugmel | 7
+Alpro Plantgurt vanilje : Lakrids, sød | 2
+granola : Müsli, uspec. | 1
+Alpro kokosdrik : | 1
+vaniljepulver : Kokosmel | 4
+granola : Müsli, uspec. | 4
+friske dadler : Koriander, blade, friske | 6
+70% mørk chokolade : Fløde 50 % | 9
+plantemælk : Plantemargarine, 80%, stege/bage | 3
+sojafløde : Fløde 50 % | 1
+friske dadler : Koriander, blade, friske | 2
+Alpro Plantgurt Naturel : Ylette naturel | 2
+hørfrø : Hørfrø, rå | 13
+fuldkornsmel : Speltmel, fuldkorn | 6
+ribs : Ribs, rå | 2
+rabarber : Rabarber, rå | 6
+natron : Bagepulver | 2
+speltmel : Speltmel, sigtet | 6
+kokosmel : Kokosmel | 3
+solbær : Solbær, rå | 3
+frossen banan : Banan, rå | 11
+appelsinjuice : Appelsinjuice, konserves | 6
+hyldeblomst : Solbærmarmelade | 1
+økologisk citron : Skummetmælk, økologisk | 2
+syltesukker : Sukker, stødt melis (saccharose) | 1
+hindbærmarmelade : Hindbærmarmelade | 1
+frosne økologiske blåbær : Blåbær, frosne, usukrede | 2
+chokoladegranola : | 1
+bær : Brombær, rå | 2
+salt : Salt, bordsalt (jodberiget) | 3
+frossen spinat : Spinat, rå | 1
+frossen ananas : Ananas, rå | 4
+stødt ingefær : Ingefær, rod, rå | 4
+vaniljeproteinpulver : | 2
+kokosflager : Kokosmel | 3
+græskarkerner : Græskarkerner, tørret | 7
+manitobahvedemel : | 4
+grahamsmel : Grahamsmel, fuldkornshvedemel | 1
+smør : Smør, usaltet | 3
+appelsinjuice : Appelsinjuice, konserves | 1
+passionsfrugt : Passionsfrugt, grenadil, rå | 2
+remoulade : Remoulade, fedtreduceret, uspec. | 1
+frisk kørvel : Karse, frisk | 1
+stenbiderrogn : Stenbider, røget | 2
+leverpostej : Leverpostej, fedtreduceret | 1
+cornichoner : Tørkage, kokosmakroner | 2
+kamsteg : Roastbeef, pålæg | 1
+flæskesvær : Flæskesvær, snacks | 1
+roastbeef : Roastbeef, pålæg | 1
+remoulade : Remoulade, fedtreduceret, uspec. | 2
+ristede løg : Løg, ristede | 1
+revet peberrod : Parmesan, revet | 1
+revet mozzarella : Parmesan, revet | 1
+falafler : Kødboller, konserves | 1
+rullepølse : Rullepølse, lammekød, pålæg | 1
+karse : Karse, frisk | 2
+pizzasauce : Tomatsuppe, spiseklar | 3
+couscous : Bulgur, parboiled, rå | 4
+grønne bønner : Grønne bønner, rå | 7
+quinoa : Quinoa, hvid, rå | 7
+gul peberfrugt : Peberfrugt, gul, rå | 4
+majs på dåse : Majs, kerner, konserves | 10
+olivenolie : Olivenolie | 1
+hjertesalat : Julesalat, rå | 9
+kikærter på dåse : Kikærter, tørrede, rå | 3
+oliven på glas : Oliven, sorte, uden sten, i saltlage | 3
+solsikkekerner : Græskarkerner, tørret | 2
+brødcroutoner : Græskarkerner, tørret | 2
+kerner : Majs, kerner, konserves | 2
+krebsehaler : Jomfruhummer, rå | 1
+asparges på dåse : Pizza med fisk, tomat og ost, fastfood | 2
+kidneybønner på dåse : Pizza med fisk, tomat og ost, fastfood | 7
+nachos : Burger med lille bøf, salat og dressing, fastfood | 4
+limesaft : Citronsaft, friskpresset | 5
+kyllingelår : Kylling, bryst (filet), kogt, pålæg | 1
+pitabrød : Knækbrød, fladbrød | 2
+hvid hvedemel : Hvid hvede, melmix | 2
+kyllingepølser : Spegepølse, oksekød | 4
+færdigblanding til kernerugbrød : Kiks til ost, Cream Crackers | 1
+mørk sirup : Chokolade, mørk | 1
+peberfrugtspesto : | 1
+forårsløg : Løg, ristede | 1
+flormelis : Kokosmel | 3
+salt/peber : Kage, trøffelprodukt / koldprodukt, industrifremstillet | 4
+frosne grønne bønner : Grønne bønner, dybfrost | 7
+kartofler : Kartoffelmos, pulver med tørmælk | 1
+oregano : Peber, chili, rå | 1
+perlespelt : Perlespelt | 6
+majs på dåse : Majs, kerner, konserves | 1
+Kerrygold mature cheddar : Cheddar, 50+ | 2
+kartoffel : Kartoffel, uspec., rå | 2
+grønkål : Grønkål, rå | 5
+atamon : Eddike | 1
+vindruer : Vindrue, rå | 1
+peberkorn : Peber, hvid | 1
+bulgur : Bulgur, parboiled, rå | 2
+tørrede abrikoser : Mungbønner, tørrede, rå | 1
+ciabatta : Pølsebrød | 1
+balsamico : Olivenolie | 1
+syltede rødløg : Tyttebær, syltede | 2
+quinoa : Quinoa, hvid, rå | 1
+ciabatta : Pølsebrød | 3
+portobellosvamp : | 1
+sukker : Sukker, stødt melis (saccharose) | 1
+hvedemel : Hvedemel, bagerimel | 3
+sød kartoffel : Batat, sød kartoffel, rå | 1
+små kartofler med skræl : Hvedebrød med fedtrige frø, store, industrifremstillet | 1
+rødløg : Løg, ristede | 1
+nakkefilet : Oksekød, mørbrad, afpudset, rå | 1
+tørret rosmarin : Pistacienød, tørret | 2
+varmrøget laks : Laks, atlantisk, vild, rå | 1
+rugbrød : Rugbrød, revet, med brunt sukker, uspec. | 1
+Alpro havredrik : Havredrik, ikke beriget | 1
+ : | 1
+svinekoteletter : Oksekød, culotte, rå | 1
+chorizo : Mozzarella, 45+ | 1
+parmesan : Parmesan, 32+ | 2
+butterdej : Roulade, abrikos | 1
+flanksteak : Oksekød, mørbrad, afpudset, rå | 1
+pastasauce : Pasta, rå | 1
+jomfruhummerhaler : Jomfruhummer, rå | 1
+cognac : Cognac | 1
+icebergsalat : Salat, Iceberg, rå | 1
+flanksteak : Oksekød, mørbrad, afpudset, rå | 1
+rejevand : | 1
+chorizo : Mozzarella, 45+ | 5
+Kerrygold vintage cheddar : Cheddar, 50+ | 1
+kålmix : | 1
+saltmandler : Lakrids, salt | 2
+Chickened Out Chunks : Dressing, blue cheese | 1
+artiskokker på dåse : Pizza med fisk, tomat og ost, fastfood | 2
+chilimayo : Tomatsuppe, spiseklar | 2
+parmaskinke : Skinke, kogt, konserves | 2
+Unbelievaballs : | 1
+peber : Peber, hvid | 3
+Frisk persille : Karse, frisk | 1
+burgerboller : Kødboller, konserves | 1
+prosciutto skinke : Skinke, kogt, konserves | 1
+færdiglavet tærtedej : Hindbærmarmelade | 2
+revet cheddar : Parmesan, revet | 6
+tigerrejer : Jomfruhummer, rå | 3
+vodka : Vodka | 1
+røget laks : Laks, atlantisk, vild, rå | 2
+peberrodssalat : Salat, mayonnaise-, makrel- | 1
+curly fries : Dressing, blue cheese | 1
+fiskebouillonterning : | 2
+frosne mangotern : Loganbær, frosne | 3
+naturel yoghurt : Yoghurt naturel, sødmælk | 4
+æble : Æble, uspec., råt | 3
+lime : Lime, rå | 2
+kerner : Majs, kerner, konserves | 2
+risengrød : Koldskål | 1
+tykmælk : Tykmælk | 1
+acaipulver : | 1
+havremælk : Ab-mælk, syrnet sødmælk | 1
+kakaonibs : Kakao, instant, med mælk, pulver | 1
+franskbrød : Franskbrød | 1
+pikant flødeost : Flødeost, 60+ | 2
+ananas på dåse : Pizza med fisk, tomat og ost, fastfood | 2
+havregryn : Havregryn, uspec. | 1
+frisk rosmarin : Karse, frisk | 1
+vandmelon : Vandmelon, rå | 6
+pinjekerner : Pinjekerne, tørret | 2
+honningmelon : Honningmelon, rå | 1
+frisk rosmarin : Karse, frisk | 1
+eddike : Eddike | 1
+saltede peanuts : Peanuts, (jordnød, ristet og saltet) | 2
+pasta penne : Pasta, rå | 1
+græsk yoghurt : Yoghurt naturel, sødmælk | 3
+broccolistav : | 1
+granatæble : Granatæble, rå | 1
+ribsgele : Ribsgele | 1
+sojasauce : Soja sauce | 1
+frosne grønne bønner : Grønne bønner, dybfrost | 1
+bearnaisesauce : Sauce, gravad laks | 1
+kikærtevand : | 1
+Chickened Out Burger : Burger med lille bøf, salat og dressing, fastfood | 1
+kikærter på dåse : Kikærter, tørrede, rå | 2
+squash : Squash, rå | 1
+hvide bønner på dåse : Hvide bønner, tørrede, rå | 1
+brune ris : Ris, brune, rå | 3
+tørret rosmarin : Pistacienød, tørret | 1
+syltede rødbeder : Tyttebær, syltede | 1
+sweet chilisauce : Sauce, barbeque | 2
+grøn karrypasta : Peberfrugt, grøn, rå | 1
+tørrede limeblade : Koriander, blade, tørrede | 3
+stødt ingefær : Ingefær, rod, rå | 1
+naanbrød : Knækbrød, fladbrød | 1
+bacon i tern : Makrel i tomat, konserves | 1
+sojayoghurt : Yoghurt naturel, sødmælk | 1
+vegetarpølser : | 1
+tyttebærmarmelade : | 1
+tacokrydderi : | 1
+jalapenos : Cheddar, 50+ | 1
+tortillapandekager : | 1
+panang karrypasta : Karry, pulver | 1
+fiskesauce : Sauce, gravad laks | 1
+oksespidsbryst : Oksekød, culotte, rå | 1
+knoldselleri : Selleri, rod, rå | 1
+bolsjebede : | 2
+fuldkornspasta : Rugbrød, fuldkorn, industrifremstillet | 1
+hummerfond : | 1
+fettuccine : Makaroni, spaghetti, fuldkorns-, rå | 2
+andebryst : Oksekød, mørbrad, afpudset, rå | 1
+kartoffelvand : Kartoffelmel | 1
+kalkunbryst : Oksekød, culotte, rå | 1
+svinebouillonterning : | 2
+frisk pasta : Pasta, rå | 1
+frisk spinatpasta : Karse, frisk | 3
+havarti : Havarti, 30+ | 1
+grov bulgur : Hvedebrød, bolle, grov, industrifremstillet | 1
+tarteletter : Kødboller, konserves | 1
+spaghetti : Makaroni, spaghetti, fuldkorns-, rå | 1
+andebryst : Oksekød, mørbrad, afpudset, rå | 2
+grønne linser på dåse : Grønne bønner, konserves | 1
+vegansk smør : Smør, usaltet | 1
+mascarpone : Flødeost, 60+ | 1
+kalkunbacon i skiver : Sardin, i tomat, konserves | 1
+cornflakes : Cornflakes, uspec. | 1
+sort sesamfrø : Quinoa, sort, rå | 1
+nektarin : Nektarin, rå | 1
+sesamfrø : Sesamfrø, hele | 1
+mornaysauce : Sauce, gravad laks | 1
+rød karrypasta : Peberfrugt, rød, rå | 1
+ravioli med fyld af spinat og ricotta : Trekantsandwich med kylling og bacon, salat og dressing, fastfood | 1
+oksekød i strimler : Grisekød i karrysovs, dybfrost | 1

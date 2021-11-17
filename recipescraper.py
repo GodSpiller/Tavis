@@ -9,6 +9,7 @@ def recipeScraper(urls):
     recipes = []
     categories = database.fetch_categories()
     match_dict = {}
+    recurrence_dict = {}
 
     for category in categories:
         match_dict[category] = nlp(category.lower().replace(",", "").replace("rå", ""))
@@ -90,7 +91,13 @@ def recipeScraper(urls):
                 print(title)
 
                 for elem in ingredients:
-                    print(elem + " : " + editDistance.compute_similarity(elem, match_dict))
+                    match = editDistance.compute_similarity(elem, match_dict)
+                    print(elem + " : " + match)
+                    elem_match = elem + " : " + match
+                    if elem_match in recurrence_dict:
+                        recurrence_dict[elem_match] += 1
+                    else:
+                        recurrence_dict[elem_match] = 1
                 print("---------------------------------------")
                     
                 #database.insertRecipe(title, instructions, image, amountUnit, time, mealType)
@@ -112,12 +119,12 @@ def recipeScraper(urls):
 
                 print('-----------------------------')
                 '''
-                
+                sleep(1)
             else:
                 sleep(0.1)
         except Exception as e: print(e)
 
-    return recipes 
+    return recurrence_dict 
 
 def getAllRecipes(urls, listOfSitesFound):
     wantToCrawl = []
@@ -142,15 +149,18 @@ def getAllRecipes(urls, listOfSitesFound):
 rp=RobotFileParser()
 nlp = spacy.load('da_core_news_lg')
 #Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
-urllink1 = ["https://mummum.dk/opskrifter/aftensmad/",
+urllink1 = ["https://mummum.dk/opskrifter/aftensmad/", "https://mummum.dk/opskrifter/morgenmad-og-brunch/",
+            "https://mummum.dk/opskrifter/frokost/",
             "https://mummum.dk/opskrifter/salater-og-tilbehoer/"]
 
-
-#"https://mummum.dk/opskrifter/morgenmad-og-brunch/",
-            #"https://mummum.dk/opskrifter/frokost/",
 #Alle opskrifter
 urllink2 = ["https://mummum.dk/opskrifter"] 
+rec_dict = recipeScraper(getAllRecipes(urllink1, []))
 
-recipeScraper(getAllRecipes(urllink1, []))
+file = open('rec.txt', 'w', encoding='utf-8')
+for key in rec_dict:
+    file.write(str(key) + " | " + str(rec_dict[key]) + "\n")
+
+file.close()
 
 #recipeScraper(["https://mummum.dk/graeskarfritter/", "https://mummum.dk/brunede-kartofler/i-ovn/"])

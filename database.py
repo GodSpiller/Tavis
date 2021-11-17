@@ -67,3 +67,35 @@ def fetch_categories():
     return categories
 
 
+def fetch_super_category(super_category):
+    conn = connectToDB()
+    curs = conn.cursor()
+
+    curs.execute("SELECT title FROM food_supercategory WHERE title = '%s'" % (super_category))
+    result = curs.fetchall()
+
+    curs.close()
+    conn.close()
+
+    return result
+
+
+def insert_category(title, super_category):
+    conn = connectToDB()
+    curs = conn.cursor()
+    
+    if fetch_super_category(super_category):
+        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
+        conn.commit()
+    else:
+        curs.execute('INSERT INTO food_supercategory (title) VALUES(\'%s\')' % super_category)
+        conn.commit()
+        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
+        conn.commit()
+
+    curs.close()
+    conn.close()
+
+
+    
+
