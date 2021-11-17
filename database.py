@@ -1,3 +1,4 @@
+import utility
 import psycopg2 as pg
 from sshtunnel import SSHTunnelForwarder
 from recipe import Recipe
@@ -21,10 +22,10 @@ def connectToDB():
 
         conn = pg.connect(
             host='localhost',
-            port=5432,
-            user='postgres',
-            password='andreas',
-            database='localtavis'
+            port=5432, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            user='postgres', # CHANGE WHEN INSERTING TO VM
+            password='andreas', # CHANGE WHEN INSERTING TO VM
+            database='localtavis' # CHANGE WHEN INSERTING TO VM
         )
 
     except:
@@ -32,7 +33,7 @@ def connectToDB():
     
     return conn
 
-def insert_recipe(recipe):
+def insert_recipe(recipe, match_dict):
     conn = connectToDB()
     curs = conn.cursor()
 
@@ -86,19 +87,51 @@ def insert_recipe(recipe):
     recipe_query = curs.fetchone()[0]
 
     for i in range(len(recipe.ingredients)):
+
+        match = utility.compute_similarity(recipe.ingredients[i], match_dict)
+
+        curs.execute(
+            '''
+            SELECT
+                id
+            FROM
+                ingredients
+            WHERE
+                title=%s                
+            ''', (match,)
+        )
+        
+        category_query = curs.fetchone()[0]
+
         curs.execute(
             '''
             INSERT INTO
                 recipe_ingredient (category, recipe_id, amount, unit)
             VALUES
                 (%s, %s, %s, %s)                
-            ''', (1, recipe_query, recipe.amounts[i], recipe.units[i],)
+            ''', (category_query, recipe_query, recipe.amounts[i], recipe.units[i],)
         )
         conn.commit()
 
     curs.close()
     conn.close()
 
+
+def insert_ingredient_category(ingredient):
+    conn = connectToDB()
+    curs = conn.cursor()
+
+    curs.execute(
+        '''
+        INSERT INTO
+            ingredients
+        VALUES
+            (%s)
+        ''', (ingredient,)
+    )
+
+    curs.close()
+    conn.close()
 
 def fetch_ingredients():
     conn = connectToDB()
@@ -122,23 +155,3 @@ def fetch_ingredients():
     conn.close()
 
     return categories
-
-def fetch_ingredient():
-    conn = connectToDB()
-    curs = conn.cursor()
-
-    curs.execute(
-        '''
-        SELECT
-            id
-        FROM
-            ingredients
-        WHERE
-            title='pulled pork'
-        '''
-    )
-
-    print(curs.fetchone()[0])
-
-    curs.close()
-    conn.close()
