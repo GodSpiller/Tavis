@@ -1,10 +1,13 @@
 import psycopg2 as pg
 from sshtunnel import SSHTunnelForwarder
+from recipe import Recipe
 
 def connectToDB():
     try:
-        print('Connecting to the PostgreSQL Database...')
+        '''
 
+        print('Connecting to the PostgreSQL Database...')
+        
         ssh_tunnel = SSHTunnelForwarder(
             ('10.92.0.161', 22),
             ssh_username="ubuntu",
@@ -14,12 +17,14 @@ def connectToDB():
 
         ssh_tunnel.start()  
         
+        '''
+
         conn = pg.connect(
             host='localhost',
-            port=ssh_tunnel.local_bind_port,
+            port=5432,
             user='postgres',
-            password='tavis',
-            database='tavis0'
+            password='andreas',
+            database='localtavis'
         )
 
     except:
@@ -27,35 +32,87 @@ def connectToDB():
     
     return conn
 
-#curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (group, name))
-
-def insertRecipe(title, instructions, img, amount_unit, time, meal_type):
+def insert_recipe(recipe):
     conn = connectToDB()
     curs = conn.cursor()
 
-    curs.execute('INSERT INTO recipe (title, instructions, time, amount_unit, meal_type, image_file_path) VALUES(\'%s\', \'%s\', %d, \'%s\', \'%s\', \'%s\')' % (title, instructions, time, amount_unit, meal_type, img))
+    curs.execute(
+        '''
+        INSERT INTO
+            recipe_type (type) 
+        VALUES
+            (%s)
+        ON CONFLICT DO NOTHING
+        ''', (recipe.meal_type,)
+    )
+
     conn.commit()
 
+    curs.execute(
+        '''
+        SELECT 
+            id 
+        FROM 
+            recipe_type 
+        WHERE 
+            type=%s
+        ''', (recipe.meal_type,)
+    )
+
+    type_query = curs.fetchone()[0]
+
+    curs.execute(
+        '''
+        INSERT INTO 
+            recipe (title, instructions, time, amount_unit, type_id, image_file_path)
+        VALUES
+            (%s, %s, %s, %s, %s, %s)
+        ''', (recipe.title, recipe.instructions, recipe.time, recipe.amount_unit, type_query, recipe.image,)
+    )
+
+    conn.commit()
+
+    curs.execute(
+        '''
+        SELECT 
+            id 
+        FROM 
+            recipe
+        WHERE 
+            title=%s
+        ''', (recipe.title,)
+    )
+
+    recipe_query = curs.fetchone()[0]
+
+    for i in range(len(recipe.ingredients)):
+        curs.execute(
+            '''
+            INSERT INTO
+                recipe_ingredient (category, recipe_id, amount, unit)
+            VALUES
+                (%s, %s, %s, %s)                
+            ''', (1, recipe_query, recipe.amounts[i], recipe.units[i],)
+        )
+        conn.commit()
+
     curs.close()
     conn.close()
 
 
-def insertIngredients(recipe_title, ingredients, units, amounts):
+def fetch_ingredients():
     conn = connectToDB()
     curs = conn.cursor()
 
-    for i in len(ingredients):
+    curs.execute(
+        '''
+        SELECT
+            title
+        FROM
+            ingredients
+        '''
+    )
 
-        curs.execute('INSERT INTO ingredient (category, recipe_id, title, amount, unit) ')
-
-    curs.close()
-    conn.close()
-
-def fetch_categories():
-    conn = connectToDB()
-    curs = conn.cursor()
-
-    curs.execute('SELECT title FROM food_category')
     result = curs.fetchall()
 
     categories = map(list, list(result))
@@ -66,36 +123,22 @@ def fetch_categories():
 
     return categories
 
-
-def fetch_super_category(super_category):
+def fetch_ingredient():
     conn = connectToDB()
     curs = conn.cursor()
 
-    curs.execute("SELECT title FROM food_supercategory WHERE title = '%s'" % (super_category))
-    result = curs.fetchall()
+    curs.execute(
+        '''
+        SELECT
+            id
+        FROM
+            ingredients
+        WHERE
+            title='pulled pork'
+        '''
+    )
+
+    print(curs.fetchone()[0])
 
     curs.close()
     conn.close()
-
-    return result
-
-
-def insert_category(title, super_category):
-    conn = connectToDB()
-    curs = conn.cursor()
-    
-    if fetch_super_category(super_category):
-        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
-        conn.commit()
-    else:
-        curs.execute('INSERT INTO food_supercategory (title) VALUES(\'%s\')' % super_category)
-        conn.commit()
-        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
-        conn.commit()
-
-    curs.close()
-    conn.close()
-
-
-    
-

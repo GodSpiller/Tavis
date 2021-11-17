@@ -1,4 +1,5 @@
 import requests, json, utility, database, editDistance, spacy
+from recipe import Recipe
 from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
@@ -6,10 +7,10 @@ from requests.models import Response
 
 
 def recipeScraper(urls):
-    recipes = []
-    categories = database.fetch_categories()
+    categories = database.fetch_ingredients()
     match_dict = {}
-    recurrence_dict = {}
+    recipes = []
+    x = 1
 
     for category in categories:
         match_dict[category] = nlp(category.lower().replace(",", "").replace("rå", ""))
@@ -20,29 +21,19 @@ def recipeScraper(urls):
             r_parse = BeautifulSoup(r.content, "html.parser")
 
             if r_parse.find('h3', text="Ingrediensliste"):
+                recipe = Recipe()
                 tempList = []
-                amounts = []
-                units = []
-                ingredients = []
-                instructions = ""
-                mealType = ''
-                quantity = 1 
-                amountUnit = ''
-                
+             
                 # Gets the title of the recipe
-                title = r_parse.find("h1", {"class" : "entry-title hyphen"}).text
+                recipe.title = r_parse.find("h1", {"class" : "entry-title hyphen"}).text
 
                 # Number of people
                 for select in r_parse.find_all('select', { 'class' : 'single-recipe-amount'}):
                     for option in select.find_all('option', { 'selected' : 'selected' }):
-                        quantity = int(option.text)
+                        recipe.quantity = int(option.text)
 
                 # Gets the time it takes to make the recipe
-                time = r_parse.find("div", {"class" : "recipe-total"}).text
-                time = time.split('\t')
-                time = time[len(time) - 1]
-
-                time = utility.convertToMinutes(time)
+                recipe.set_time(r_parse.find("div", {"class" : "recipe-total"}).text)
 
                 # Finds the html with ingredients that also contains unit and amount
                 for li in r_parse.find_all('li', {"class" : "components"}):
@@ -52,79 +43,74 @@ def recipeScraper(urls):
                 # Preprocess ingredients into three seperate lists: item, unit and amount
                 for i in range(0, len(tempList), 3):
 
-                    # Remove. Probably? Or not.
-                    if tempList[i + 2] == 'salt/peber':
-                        continue
-
                     # Normalizes the value to one person/piece
                     if tempList[i] !=  '':
-                        amounts.append(float(tempList[i].replace(',', '.')) / quantity)
+                        recipe.amounts.append(float(tempList[i].replace(',', '.')) / recipe.quantity)
                     else:
-                        amounts.append(tempList[i])
+                        recipe.amounts.append(None)
 
-                    units.append(tempList[i + 1])
-                    ingredients.append(tempList[i + 2])
+
+                    if (tempList[i + 1] != ''):
+                        recipe.units.append(tempList[i + 1])
+                    else:
+                        recipe.units.append(None)
+
+                    recipe.ingredients.append(tempList[i + 2])
 
                 # Instructions for the recipe
                 for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
                     for ol in div.find_all('ol'):
                         for li in ol.find_all('li'):
-                            instructions = instructions + "|"  + li.text
+                            recipe.instructions = recipe.instructions + "|"  + li.text
 
                 
                 # Type of meal (Dinner, breakfast, etc.)
                 for p in r_parse.find_all('p', { 'class' : 'breadcrumbs' }):
-                    mealType = p.text
-
-                mealType = mealType.split(' / ')
-                mealType = mealType[2]
+                    recipe.set_meal_type(p.text)
 
                 # Unit amount
                 for span in r_parse.find_all('span', { 'class' : 'recipe-amount-select'}):
-                    amountUnit = span.text
+                    recipe.set_amount_unit(span.text)
 
-                amountUnit = amountUnit.replace('\t', '').split(' ')
-                amountUnit = amountUnit[len(amountUnit) - 1]
 
-                image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
-
-                print(title)
-
-                for elem in ingredients:
+                recipe.image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
+                '''
+                print('-----------------------\n', recipe.title)
+                for elem in recipe.ingredients:
                     match = editDistance.compute_similarity(elem, match_dict)
                     print(elem + " : " + match)
-                    elem_match = elem + " : " + match
-                    if elem_match in recurrence_dict:
-                        recurrence_dict[elem_match] += 1
-                    else:
-                        recurrence_dict[elem_match] = 1
-                print("---------------------------------------")
-                    
+                '''                
                 #database.insertRecipe(title, instructions, image, amountUnit, time, mealType)
                 #database.insertIngredients(title, ingredients, units, amounts) 
 
-                '''print('\n\nTitle: ' + title)
-                print('Image: ' + image)
-                print('Time: ' + str(time))
-                print('Type: ' + mealType)
-                print('Unit: ' +  amountUnit)
+                '''
+                print('\n\nTitle: ' + recipe.title)
+                print('Image: ' + recipe.image)
+                print('Time: ' + str(recipe.time))
+                print('Type: ' + recipe.meal_type)
+                print('Unit: ' +  recipe.amount_unit)
                 print('--------Ingredients---------')
                 
-                for i in range(len(amounts)):
-                    print(amounts[i], units[i], ingredients[i])
+                for i in range(len(recipe.amounts)):
+                    print(recipe.amounts[i], recipe.units[i], recipe.ingredients[i])
 
 
                 print('--------Instructions---------')
-                print(instructions)
+                print(recipe.instructions)
 
                 print('-----------------------------')
                 '''
+                
+                database.insert_recipe(recipe)
+                print('recipes added: ', x)
+                x = x + 1
+
                 sleep(1)
             else:
                 sleep(0.1)
         except Exception as e: print(e)
 
-    return recurrence_dict 
+    return recipes
 
 def getAllRecipes(urls, listOfSitesFound):
     wantToCrawl = []
@@ -155,12 +141,14 @@ urllink1 = ["https://mummum.dk/opskrifter/aftensmad/", "https://mummum.dk/opskri
 
 #Alle opskrifter
 urllink2 = ["https://mummum.dk/opskrifter"] 
-rec_dict = recipeScraper(getAllRecipes(urllink1, []))
+recipeScraper(getAllRecipes(urllink1, []))
 
+'''
 file = open('rec.txt', 'w', encoding='utf-8')
 for key in rec_dict:
     file.write(str(key) + " | " + str(rec_dict[key]) + "\n")
 
 file.close()
+'''
 
-#recipeScraper(["https://mummum.dk/graeskarfritter/", "https://mummum.dk/brunede-kartofler/i-ovn/"])
+#recipeScraper(["https://mummum.dk/medister/i-ovn/"])

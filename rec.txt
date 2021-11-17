@@ -94,7 +94,6 @@ stødt koriander : Koriander, frø | 9
 majsstivelse : Majsstivelse | 11
 kokosmælk : Karry, pulver | 27
 ris : Ris, brune, rå | 33
-hel kylling : Boghvede, hel, rå | 1
 rød karrypasta : Peberfrugt, rød, rå | 3
 sød kartoffel : Batat, sød kartoffel, rå | 23
 frisk persille : Karse, frisk | 5
@@ -301,7 +300,6 @@ tørret timian : Dild, tørret | 1
 løg : Løg, ristede | 3
 grov tærtedej : Hvedebrød, bolle, grov, industrifremstillet | 5
 æg : Æg, høne, æggehvide, pasteuriseret | 3
-Salt/peber : Kage, trøffelprodukt / koldprodukt, industrifremstillet | 1
 rød peberfrugt : Peberfrugt, rød, rå | 7
 naturel flødeost : Yoghurt naturel, sødmælk | 8
 hvidløg : Hvidløg, rå | 3
@@ -447,7 +445,6 @@ tørret rosmarin : Pistacienød, tørret | 2
 varmrøget laks : Laks, atlantisk, vild, rå | 1
 rugbrød : Rugbrød, revet, med brunt sukker, uspec. | 1
 Alpro havredrik : Havredrik, ikke beriget | 1
- : | 1
 svinekoteletter : Oksekød, culotte, rå | 1
 chorizo : Mozzarella, 45+ | 1
 parmesan : Parmesan, 32+ | 2
