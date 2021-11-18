@@ -27,7 +27,7 @@ def scraper(catalogId):
         print(offer['offer']['run_till'])
 
 
-def getAllCatalogs(url):
+def get_all_catalogs(url):
     rp.set_url(url)
     rp.read()
     
@@ -44,8 +44,10 @@ def getAllCatalogs(url):
                     storeId = i['state']['data']['dealerId'],
                     catId = i['state']['data']['id']
                 ))
-                scraper(i['state']['data']['id'])
+                #scraper(i['state']['data']['id'])
 
 rp=RobotFileParser()
 urllink = "https://etilbudsavis.dk/discover/groceries"
+
+get_all_catalogs(urllink)
 

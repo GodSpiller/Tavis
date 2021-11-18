@@ -22,8 +22,6 @@ def get_recurrence(trash):
 raw_ingredients.sort(key=get_recurrence)
 raw_ingredients.reverse()
 
-nlp = spacy.load('da_core_news_lg')
-hej = ['hel', 'lys', 'mørk', 'frossen', 'frosne', 'frisk', 'sød', 'rød', 'gul', 'grøn']            
 
 def process_ingredients():
     ingredients = []
@@ -34,3 +32,6 @@ def process_ingredients():
 
     for i in ingredients:
         database.insert_ingredient_category(i)
+
+
+process_ingredients()

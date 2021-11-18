@@ -9,6 +9,7 @@ from requests.models import Response
 def recipe_scraper(urls):
     categories = database.fetch_ingredients()
     match_dict = {}
+    meal_types = ["Aftensmad", "Frokost", "Søde sager", "Drikkevarer", "Tilbehør til aftensmad", "Sundere alternativer", "Bagværk", "Morgenmad"]
     x = 1
 
     for category in categories:
@@ -75,10 +76,10 @@ def recipe_scraper(urls):
                 # Image path
                 recipe.image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
 
-                
-                database.insert_recipe(recipe, match_dict)
-                print('recipes added: ', x)
-                x = x + 1
+                if recipe.meal_type in meal_types:
+                    database.insert_recipe(recipe, match_dict)
+                    print('recipes added: ', x)
+                    x = x + 1
 
                 sleep(1)
             else:
@@ -114,8 +115,8 @@ urls = ["https://mummum.dk/opskrifter/aftensmad/", "https://mummum.dk/opskrifter
         "https://mummum.dk/opskrifter/frokost/",
         "https://mummum.dk/opskrifter/salater-og-tilbehoer/"]
 
-# recipeScraper(get_all_recipes(urllink1, []))
+recipe_scraper(get_all_recipes(urls, []))
 
-recipe_scraper(['https://mummum.dk/julepavlova-med-kirsebaersauce-og-creme/'])
+#recipe_scraper(['https://mummum.dk/julepavlova-med-kirsebaersauce-og-creme/'])
 
 
