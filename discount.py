@@ -1,4 +1,6 @@
-class catalogue(object):
+import utility
+
+class Catalogue(object):
 
     def __init__(self):
         self.store_name = ""
@@ -9,7 +11,7 @@ class catalogue(object):
 
         
 
-class discount(object):
+class Discount(object):
 
     def __init__(self):
         self.title = ""
