@@ -77,6 +77,6 @@ def highest_values(dict, offer_amount):
     dumb_list.reverse()
 
     for x in range(offer_amount):
-        if dumb_list[x][1] > 0.85:
+        if dumb_list[x][1] :
             top_list.append(dumb_list[x])
     return top_list
