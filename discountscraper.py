@@ -35,11 +35,11 @@ def scraper(catalogue):
             discount_offer.valid_from = offer['offer']['run_from'].split("T")[0]
             discount_offer.valid_to = offer['offer']['run_till'].split("T")[0]
             combo = discount_offer.valid_from + " : " + discount_offer.valid_to
-
-
-            temp = compute_similarity_discount(discount_offer.title, match_dict)
-            if temp != None:
-                print(discount_offer.title + " : " + compute_similarity_discount(discount_offer.title, match_dict))
+            offer_amount = len(discount_offer.title.replace(" eller ", ",").split(","))
+            if offer_amount != None:
+                temp = compute_similarity_discount(discount_offer.title, match_dict, offer_amount)
+            if temp != [] and temp != None:
+               print(discount_offer.title + " : " + str(temp))
 
             if combo in dates_dict:
                 dates_dict[combo] += 1
@@ -54,8 +54,7 @@ def scraper(catalogue):
         dates = combo_date.split(':')
         catalogue.valid_from = dates[0]
         catalogue.valid_to = dates[1]
-    except:
-        print('fuck dig calle')
+    except Exception as e: print(e)
     
 def get_all_catalogs(url):
     rp.set_url(url)
@@ -82,7 +81,6 @@ nlp = spacy.load('da_core_news_lg')
 
 match_dict = {}
 categories = database.fetch_ingredients()
-
 
 for category in categories:
     match_dict[category] = nlp(category.lower())
