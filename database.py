@@ -6,24 +6,25 @@ from recipe import Recipe
 def connectToDB():
     try:
         
-        ssh_tunnel = SSHTunnelForwarder(
-            ('10.92.0.161', 22),
-            ssh_username="ubuntu",
-            ssh_private_key= 'SSHKEY.pem',
-            remote_bind_address=('localhost', 5432)
-        )
+        #ssh_tunnel = SSHTunnelForwarder(
+        #    ('10.92.0.161', 22),
+        #    ssh_username="ubuntu",
+        #    ssh_private_key= 'SSHKEY.pem',
+        #    remote_bind_address=('localhost', 5432)
+        #)
 
-        ssh_tunnel.start()  
+        #ssh_tunnel.start()  
         
 
         conn = pg.connect(
             host='localhost',
-            port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            #port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            port=5432,
             user='postgres', # CHANGE WHEN INSERTING TO VM
-            password='tavis', # CHANGE WHEN INSERTING TO VM
-            database='tavis' # CHANGE WHEN INSERTING TO VM
+            password='psqlkode', # CHANGE WHEN INSERTING TO VM
+            database='test2' # CHANGE WHEN INSERTING TO VM
         )
-
+        
     except:
         print('Connection Has Failed...') 
     
@@ -112,7 +113,6 @@ def insert_recipe(recipe, match_dict):
     curs.close()
     conn.close()
 
-
 def insert_ingredient_category(ingredient):
     conn = connectToDB()
     curs = conn.cursor()
@@ -153,3 +153,35 @@ def fetch_ingredients():
     conn.close()
 
     return categories
+
+def insert_catalogue(catalogue):
+    conn = connectToDB()
+    curs = conn.cursor()
+    
+    curs.execute(
+        '''
+        INSERT INTO 
+            discount_catalogue (store_chain_id, valid_from, valid_to)
+        SELECT 
+            s.id,
+            TO_DATE(%s , 'DD/MM/YYYY'),
+            TO_DATE(%s , 'DD/MM/YYYY')
+        FROM
+            store_chain as s
+        WHERE
+            s.name = %s
+        ''', (catalogue.valid_from, catalogue.valid_to, catalogue.store_name)
+    )
+    
+def insert_dicound_product(Discount):
+    conn = connectToDB()
+    curs = conn.cursor()
+    
+    curs.execute(
+        '''
+        INSERT INTO
+            discount_product (catalogue_id, title, price, before_price, valid_from, valid_to, amount, unit)
+        
+        
+        '''
+    )

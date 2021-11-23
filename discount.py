@@ -9,8 +9,6 @@ class Catalogue(object):
         self.valid_to = ""
         #liste = 
 
-        
-
 class Discount(object):
 
     def __init__(self):

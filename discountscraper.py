@@ -15,9 +15,7 @@ def scraper(catalogue):
         link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots".format(
             catId = catalogue.catalogue_id
         )
-        combo_date = ""
-        highest = 0
-        dates_dict = {}
+        
         response = json.loads(requests.get(link).text)
         print(catalogue.store_name)
 
@@ -34,28 +32,24 @@ def scraper(catalogue):
             #fra og til
             discount_offer.valid_from = offer['offer']['run_from'].split("T")[0]
             discount_offer.valid_to = offer['offer']['run_till'].split("T")[0]
-            combo = discount_offer.valid_from + " : " + discount_offer.valid_to
             offer_amount = len(discount_offer.title.replace(" eller ", ",").split(","))
             if offer_amount != None:
                 temp = compute_similarity_discount(discount_offer.title, match_dict, offer_amount)
             if temp != [] and temp != None:
                print(discount_offer.title + " : " + str(temp))
 
-            if combo in dates_dict:
-                dates_dict[combo] += 1
-            else:
-                dates_dict[combo] = 1
-        
-        for key in dates_dict.keys():
-            if dates_dict[key] > highest:
-                highest = dates_dict[key]
-                combo_date = key
-
-        dates = combo_date.split(':')
-        catalogue.valid_from = dates[0]
-        catalogue.valid_to = dates[1]
     except Exception as e: print(e)
     
+#def scrape_catalogue(catalogue):
+#        
+#        link = "https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}".format(
+#            catId = catalogue.catalogue_id
+#        )
+#        response = json.loads(requests.get(link).text)
+#        
+#        catalogue.valid_from = response['run_from']
+#        catalogue.valid_to = response['run_till']
+
 def get_all_catalogs(url):
     rp.set_url(url)
     rp.read()
@@ -72,6 +66,7 @@ def get_all_catalogs(url):
                 catalogue.store_name = i['state']['data']['branding']['name']
                 catalogue.catalogue_id = i['state']['data']['id']   
                 
+                #scrape_catalogue(catalogue)
                 scraper(catalogue)
 
 rp=RobotFileParser()
