@@ -1,33 +1,32 @@
 import utility
-import psycopg2 as pg
+import psycopg2 as psycopg2
 from sshtunnel import SSHTunnelForwarder
 from recipe import Recipe
 
 def connectToDB():
     try:
-        
-        #ssh_tunnel = SSHTunnelForwarder(
-        #    ('10.92.0.161', 22),
-        #    ssh_username="ubuntu",
-        #    ssh_private_key= 'SSHKEY.pem',
-        #    remote_bind_address=('localhost', 5432)
-        #)
 
-        #ssh_tunnel.start()  
-        
-
-        conn = pg.connect(
-            host='localhost',
-            #port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
-            port=5432,
-            user='postgres', # CHANGE WHEN INSERTING TO VM
-            password='psqlkode', # CHANGE WHEN INSERTING TO VM
-            database='test2' # CHANGE WHEN INSERTING TO VM
+        ssh_tunnel = SSHTunnelForwarder(
+            ('10.92.0.161', 22),
+            ssh_username="ubuntu",
+            ssh_private_key= 'SSHKEY.pem',
+            remote_bind_address=('localhost', 5432)
         )
-        
+
+        ssh_tunnel.start()  
+
+
+        conn = psycopg2.connect(
+            host='localhost',
+            port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            user='postgres', # CHANGE WHEN INSERTING TO VM
+            password='tavis', # CHANGE WHEN INSERTING TO VM
+            database='tavis' # CHANGE WHEN INSERTING TO VM
+        )
+
     except:
         print('Connection Has Failed...') 
-    
+
     return conn
 
 def insert_recipe(recipe, match_dict):
@@ -154,34 +153,72 @@ def fetch_ingredients():
 
     return categories
 
+
+def fetch_catalogue_id():
+    conn = connectToDB()
+    curs = conn.cursor()
+
+    curs.execute(''' SELECT catalogue_id FROM catalogues''')
+    
+    result = curs.fetchall
+    catalogue_ids = map(list, list(result))
+    catalogue_ids = sum(catalogue_ids, [])
+
+    curs.close()
+    conn.close()
+
+    return catalogue_ids
+
+
 def insert_catalogue(catalogue):
     conn = connectToDB()
     curs = conn.cursor()
-    
+
     curs.execute(
-        '''
-        INSERT INTO 
-            discount_catalogue (store_chain_id, valid_from, valid_to)
-        SELECT 
-            s.id,
-            TO_DATE(%s , 'DD/MM/YYYY'),
-            TO_DATE(%s , 'DD/MM/YYYY')
-        FROM
-            store_chain as s
-        WHERE
-            s.name = %s
-        ''', (catalogue.valid_from, catalogue.valid_to, catalogue.store_name)
-    )
+    '''
+    INSERT INTO 
+        discount_catalogues (store_chain_id, valid_from, valid_to, api_id)
+    SELECT 
+        s.id,
+        TO_DATE(%s , 'DD/MM/YYYY'),
+        TO_DATE(%s , 'DD/MM/YYYY'),
+        %s
+    FROM
+        store_chain as s
+    WHERE
+        s.name = %s AND
+        NOT EXISTS 
+            SELECT
+                *
+            FROM
+                discount_catalogue as d
+            WHERE d.api_id = %s
+            
+    ''', (catalogue.valid_from, catalogue.valid_to, catalogue.api_id, catalogue.store_name, catalogue.api_id,))
+
+    curs.close()
+    conn.close()
     
-def insert_dicound_product(Discount):
+    
+def insert_discount_product(discount):
     conn = connectToDB()
-    curs = conn.cursor()
     
-    curs.execute(
-        '''
-        INSERT INTO
-            discount_product (catalogue_id, title, price, before_price, valid_from, valid_to, amount, unit)
-        
-        
-        '''
-    )
+    tuples = [tuple(x) for x in discount]
+    
+    # SQL quert to execute
+    query  = '''INSERT INTO discount_products 
+                    (catalogue_id, title, price, valid_from, valid_to, amount, unit) 
+                    VALUES %%s''' 
+    cursor = conn.cursor()
+    try:
+        psycopg2.extras.execute_values(cursor, query, tuples)
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cursor.close()
+        return 1
+    print("execute_values() done")
+    cursor.close()
+    conn.close()
+

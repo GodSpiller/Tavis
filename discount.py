@@ -12,10 +12,20 @@ class Catalogue(object):
 class Discount(object):
 
     def __init__(self):
+        self.catalogue_id
         self.title = ""
         self.price = 0.0
-        #before price måske? tror ikke vi har det though
         self.valid_from = ""
         self.valid_to = ""
         self.amount = 0
         self.unit = ""
+        self.matches = []
+
+    def __iter__(self):
+        yield self.catalogue_id
+        yield self.title
+        yield self.price
+        yield self.valid_from
+        yield self.valid_to
+        yield self.amount
+        yield self.unit
