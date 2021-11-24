@@ -17,7 +17,7 @@ class Discount(object):
         self.price = 0.0
         self.valid_from = ""
         self.valid_to = ""
-        self.amount = 0
+        self.amount = ""
         self.unit = ""
         self.matches = []
 
@@ -27,5 +27,5 @@ class Discount(object):
         yield self.price
         yield self.valid_from
         yield self.valid_to
-        yield self.amount
         yield self.unit
+        yield self.amount

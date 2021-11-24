@@ -24,12 +24,16 @@ def scraper(catalogue):
             #price
             discount_offer.price = offer['offer']['pricing']['price']
             #unit symbol        
-            discount_offer.unit = offer['offer']['quantity']['unit']['si']
+            discount_offer.unit = offer['offer']['quantity']['unit']['symbol']
             #amount   
-            discount_offer.amount = offer['offer']['quantity']['size']
+            discount_offer.amount = str(offer['offer']['quantity']['size']['from'])
+            discount_offer.amount += "-" + str(offer['offer']['quantity']['size']['to']) 
+            
+            
             #fra og til
             discount_offer.valid_from = offer['offer']['run_from'].split("T")[0]
             discount_offer.valid_to = offer['offer']['run_till'].split("T")[0]
+
             discount_offer.catalogue_id = catalogue.catalogue_id
             
             discounts.append(discount_offer)

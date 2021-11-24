@@ -193,9 +193,11 @@ def insert_catalogue(catalogue):
             FROM
                 discount_catalogues as d
             WHERE d.id = %s)
+            ON CONFLICT DO NOTHING
             
     ''', (catalogue.valid_from, catalogue.valid_to, catalogue.catalogue_id, catalogue.store_name, catalogue.catalogue_id,))
 
+    conn.commit()
     curs.close()
     conn.close()
     
@@ -204,10 +206,10 @@ def insert_discount_product(discount):
     conn = connectToDB()
     
     tuples = [tuple(x) for x in discount]
-    
+    print(tuples)
     # SQL quert to execute
     query  = '''INSERT INTO discount_products 
-                    (catalogue_id, title, price, valid_from, valid_to, amount, unit) 
+                    (catalogue_id, title, price, valid_from, valid_to, unit, amount) 
                 VALUES 
                     %%s''' % ()
     cursor = conn.cursor()
@@ -222,4 +224,3 @@ def insert_discount_product(discount):
     print("execute_values() done")
     cursor.close()
     conn.close()
-
