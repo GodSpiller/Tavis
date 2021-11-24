@@ -21,7 +21,7 @@ def connectToDB():
             port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
             user='postgres', # CHANGE WHEN INSERTING TO VM
             password='tavis', # CHANGE WHEN INSERTING TO VM
-            database='tavis_db' # CHANGE WHEN INSERTING TO VM
+            database='tavis_new' # CHANGE WHEN INSERTING TO VM
         )
 
     except:
@@ -181,7 +181,7 @@ def insert_catalogue(catalogue):
     SELECT 
         s.id,
         TO_DATE(%s , 'YYYY/MM/DD'),
-        TO_DATE(%s , 'YYYY/DD/YYYY'),
+        TO_DATE(%s , 'YYYY/MM/DD'),
         %s
     FROM
         store_chains as s
@@ -223,4 +223,49 @@ def insert_discount_product(discount):
         return 1
     print("execute_values() done")
     cursor.close()
+    conn.close()
+
+def insert_match(discount, match):
+    conn = connectToDB()
+    curs = conn.cursor()
+
+
+    curs.execute(
+        '''INSERT INTO product_category (discount_product_id, food_supercategory_id, match_ratio)
+            SELECT
+                discount_products.id,
+                food_supercategories.id,
+                %s
+            FROM 
+                discount_products, food_supercategories
+            WHERE
+                (discount_products.title = %s AND
+                food_supercategories.title = %s) 
+                    ''', (match[1], discount.title, match[0],))
+    conn.commit()
+
+    curs.close()
+    conn.close()
+
+def batch_insert_matches(discounts):
+    conn = connectToDB()
+    curs = conn.cursor()
+    tuples = []
+    for discount in discounts:
+        if discount.matches != None:
+            for match in discount.matches:
+                curs.execute('''INSERT INTO product_category (discount_product_id, food_supercategory_id, match_ratio)
+                        SELECT
+                            discount_products.id,
+                            food_supercategories.id,
+                            %s
+                        FROM 
+                            discount_products, food_supercategories
+                        WHERE
+                            discount_products.title = %s AND
+                            food_supercategories.title = %s
+                    ''', (match[1], discount.title, match[0],))
+    conn.commit()
+
+    curs.close()
     conn.close()

@@ -29,3 +29,8 @@ class Discount(object):
         yield self.valid_to
         yield self.unit
         yield self.amount
+        
+
+
+
+    
