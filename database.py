@@ -6,7 +6,7 @@ from recipe import Recipe
 
 def connectToDB():
     try:
-        '''
+        
         ssh_tunnel = SSHTunnelForwarder(
             ('10.92.0.161', 22),
             ssh_username="ubuntu",
@@ -14,15 +14,14 @@ def connectToDB():
             remote_bind_address=('localhost', 5432)
         )
 
-        ssh_tunnel.start()  
-        '''
+        ssh_tunnel.start()     
 
         conn = psycopg2.connect(
             host='localhost',
-            port=5432, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
             user='postgres', # CHANGE WHEN INSERTING TO VM
-            password='andreas', # CHANGE WHEN INSERTING TO VM
-            database='test' # CHANGE WHEN INSERTING TO VM
+            password='tavis', # CHANGE WHEN INSERTING TO VM
+            database='tavis_db' # CHANGE WHEN INSERTING TO VM
         )
 
     except:
@@ -178,7 +177,7 @@ def insert_catalogue(catalogue):
     curs.execute(
     '''
     INSERT INTO 
-        discount_catalogues (store_chain_id, valid_form, valid_to, id)
+        discount_catalogues (store_chain_id, valid_from, valid_to, id)
     SELECT 
         s.id,
         TO_DATE(%s , 'YYYY/MM/DD'),
