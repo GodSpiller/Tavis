@@ -12,7 +12,7 @@ class Catalogue(object):
 class Discount(object):
 
     def __init__(self):
-        self.catalogue_id
+        self.catalogue_id = ""
         self.title = ""
         self.price = 0.0
         self.valid_from = ""

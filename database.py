@@ -1,11 +1,12 @@
 import utility
 import psycopg2 as psycopg2
+import psycopg2.extras as extras
 from sshtunnel import SSHTunnelForwarder
 from recipe import Recipe
 
 def connectToDB():
     try:
-
+        '''
         ssh_tunnel = SSHTunnelForwarder(
             ('10.92.0.161', 22),
             ssh_username="ubuntu",
@@ -14,14 +15,14 @@ def connectToDB():
         )
 
         ssh_tunnel.start()  
-
+        '''
 
         conn = psycopg2.connect(
             host='localhost',
-            port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            port=5432, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
             user='postgres', # CHANGE WHEN INSERTING TO VM
-            password='tavis', # CHANGE WHEN INSERTING TO VM
-            database='tavis' # CHANGE WHEN INSERTING TO VM
+            password='andreas', # CHANGE WHEN INSERTING TO VM
+            database='test' # CHANGE WHEN INSERTING TO VM
         )
 
     except:
@@ -158,9 +159,9 @@ def fetch_catalogue_id():
     conn = connectToDB()
     curs = conn.cursor()
 
-    curs.execute(''' SELECT catalogue_id FROM catalogues''')
+    curs.execute(''' SELECT id FROM discount_catalogues''')
     
-    result = curs.fetchall
+    result = curs.fetchall()
     catalogue_ids = map(list, list(result))
     catalogue_ids = sum(catalogue_ids, [])
 
@@ -177,24 +178,24 @@ def insert_catalogue(catalogue):
     curs.execute(
     '''
     INSERT INTO 
-        discount_catalogues (store_chain_id, valid_from, valid_to, api_id)
+        discount_catalogues (store_chain_id, valid_form, valid_to, id)
     SELECT 
         s.id,
-        TO_DATE(%s , 'DD/MM/YYYY'),
-        TO_DATE(%s , 'DD/MM/YYYY'),
+        TO_DATE(%s , 'YYYY/MM/DD'),
+        TO_DATE(%s , 'YYYY/DD/YYYY'),
         %s
     FROM
-        store_chain as s
+        store_chains as s
     WHERE
         s.name = %s AND
         NOT EXISTS 
-            SELECT
+            (SELECT
                 *
             FROM
-                discount_catalogue as d
-            WHERE d.api_id = %s
+                discount_catalogues as d
+            WHERE d.id = %s)
             
-    ''', (catalogue.valid_from, catalogue.valid_to, catalogue.api_id, catalogue.store_name, catalogue.api_id,))
+    ''', (catalogue.valid_from, catalogue.valid_to, catalogue.catalogue_id, catalogue.store_name, catalogue.catalogue_id,))
 
     curs.close()
     conn.close()
@@ -208,10 +209,11 @@ def insert_discount_product(discount):
     # SQL quert to execute
     query  = '''INSERT INTO discount_products 
                     (catalogue_id, title, price, valid_from, valid_to, amount, unit) 
-                    VALUES %%s''' 
+                VALUES 
+                    %%s''' % ()
     cursor = conn.cursor()
     try:
-        psycopg2.extras.execute_values(cursor, query, tuples)
+        extras.execute_values(cursor, query, tuples)
         conn.commit()
     except (Exception, psycopg2.DatabaseError) as error:
         print("Error: %s" % error)

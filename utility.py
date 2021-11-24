@@ -35,12 +35,15 @@ def convertToMinutes(input):
 
 
 
-def compute_similarity_discount(discount, categories, offer_amount):
-    discount = nlp(discount)
+def compute_similarity_discount(title, categories):
+    
+    discount = nlp(title)
     similarity_score = 0
     best_match = []
     similarity_dict = {}
     nouninized_discount = ""
+
+    offer_amount = len(title.replace(" eller ", ",").split(","))
 
     for token in discount:
         if token.pos_ == 'NOUN':

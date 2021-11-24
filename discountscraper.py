@@ -30,7 +30,7 @@ def scraper(catalogue):
             #fra og til
             discount_offer.valid_from = offer['offer']['run_from'].split("T")[0]
             discount_offer.valid_to = offer['offer']['run_till'].split("T")[0]
-            discount_offer.catelogue_id = catalogue.catalogue_id
+            discount_offer.catalogue_id = catalogue.catalogue_id
             
             discounts.append(discount_offer)
 
