@@ -6,14 +6,10 @@ from urllib.robotparser import RobotFileParser
 from requests.models import Response
 
 
-def recipe_scraper(urls):
-    categories = database.fetch_ingredients()
-    match_dict = {}
+def recipe_scraper(urls, match_dict):
+    recipes = []
     meal_types = ["Aftensmad", "Frokost", "Søde sager", "Drikkevarer", "Tilbehør til aftensmad", "Sundere alternativer", "Bagværk", "Morgenmad"]
     x = 1
-
-    for category in categories:
-        match_dict[category] = nlp(category.lower())
 
     for url in urls or []:
         try:
@@ -77,14 +73,14 @@ def recipe_scraper(urls):
                 recipe.image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
 
                 if recipe.meal_type in meal_types:
-                    database.insert_recipe(recipe, match_dict)
-                    print('recipes added: ', x)
-                    x = x + 1
+                    recipes.append(recipe)
 
                 sleep(1)
             else:
                 sleep(0.1)
         except Exception as e: print(e)
+
+    database.insert_recipe(recipes, match_dict)
 
 def get_all_recipes(urls, listOfSitesFound):
     wantToCrawl = []
@@ -103,19 +99,24 @@ def get_all_recipes(urls, listOfSitesFound):
                 listOfSitesFound.append(href)                                                   #Add href to lsitOfSitesFound
 
     if wantToCrawl:                                                                       # If empty == false
-        get_all_recipes(wantToCrawl,listOfSitesFound)
+        get_all_recipes(wantToCrawl, listOfSitesFound)
+
     return listOfSitesFound
 
 rp=RobotFileParser()
 
 nlp = spacy.load('da_core_news_lg')
 
-#Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
-urls = ["https://mummum.dk/opskrifter/aftensmad/", "https://mummum.dk/opskrifter/morgenmad-og-brunch/",
-        "https://mummum.dk/opskrifter/frokost/",
-        "https://mummum.dk/opskrifter/salater-og-tilbehoer/"]
+categories = database.fetch_ingredients()
+match_dict = {}
+    
+for category in categories:
+    match_dict[category] = nlp(category.lower())
 
-recipe_scraper(get_all_recipes(urls, []))
+#Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
+urls = ["https://mummum.dk/opskrifter/"]
+
+recipe_scraper(get_all_recipes(urls, []), match_dict)
 
 #recipe_scraper(['https://mummum.dk/julepavlova-med-kirsebaersauce-og-creme/'])
 

@@ -29,84 +29,85 @@ def connectToDB():
 
     return conn
 
-def insert_recipe(recipe, match_dict):
+def insert_recipe(recipes, match_dict):
     conn = connectToDB()
     curs = conn.cursor()
-
-    curs.execute(
-        '''
-        INSERT INTO
-            recipe_types (type) 
-        VALUES
-            (%s)
-        ON CONFLICT DO NOTHING
-        ''', (recipe.meal_type,)
-    )
-
-    conn.commit()
-
-    curs.execute(
-        '''
-        SELECT 
-            id 
-        FROM 
-            recipe_types 
-        WHERE 
-            type=%s
-        ''', (recipe.meal_type,)
-    )
-
-    type_query = curs.fetchone()[0]
-
-    curs.execute(
-        '''
-        INSERT INTO 
-            recipes (title, instructions, time, amount_unit, type_id, image_file_path)
-        VALUES
-            (%s, %s, %s, %s, %s, %s)
-        ''', (recipe.title, recipe.instructions, recipe.time, recipe.amount_unit, type_query, recipe.image,)
-    )
-
-    conn.commit()
-
-    curs.execute(
-        '''
-        SELECT 
-            id 
-        FROM 
-            recipes
-        WHERE 
-            title=%s
-        ''', (recipe.title,)
-    )
-
-    recipe_query = curs.fetchone()[0]
-
-    for i in range(len(recipe.ingredients)):
-
-        match = utility.compute_similarity(recipe.ingredients[i], match_dict)
-
-        curs.execute(
-            '''
-            SELECT
-                id
-            FROM
-                food_supercategories
-            WHERE
-                title=%s                
-            ''', (match,)
-        )
-        
-        category_query = curs.fetchone()[0]
-
+    
+    for recipe in recipes:
         curs.execute(
             '''
             INSERT INTO
-                ingredients (category, recipe_id, amount, unit)
+                recipe_types (type) 
             VALUES
-                (%s, %s, %s, %s)                
-            ''', (category_query, recipe_query, recipe.amounts[i], recipe.units[i],)
+                (%s)
+            ON CONFLICT DO NOTHING
+            ''', (recipe.meal_type,)
         )
+
+        conn.commit()
+
+        curs.execute(
+            '''
+            SELECT 
+                id 
+            FROM 
+                recipe_types 
+            WHERE 
+                type=%s
+            ''', (recipe.meal_type,)
+        )
+        
+        type_query = curs.fetchone()[0]
+
+        curs.execute(
+            '''
+            INSERT INTO 
+                recipes (title, instructions, time, amount_unit, type_id, image_file_path)
+            VALUES
+                (%s, %s, %s, %s, %s, %s)
+            ''', (recipe.title, recipe.instructions, recipe.time, recipe.amount_unit, type_query, recipe.image,)
+        )
+
+        conn.commit()
+
+        curs.execute(
+            '''
+            SELECT 
+                id 
+            FROM 
+                recipes
+            WHERE 
+                title=%s
+            ''', (recipe.title,)
+        )
+
+        recipe_query = curs.fetchone()[0]
+
+        for i in range(len(recipe.ingredients)):
+
+            match = utility.compute_similarity(recipe.ingredients[i], match_dict)
+            if match != None:
+                curs.execute(
+                    '''
+                    SELECT
+                        id
+                    FROM
+                        food_supercategories
+                    WHERE
+                        title=%s                
+                    ''', (match,)
+                )
+            
+                category_query = curs.fetchone()[0]
+
+                curs.execute(
+                    '''
+                    INSERT INTO
+                        ingredients (category, recipe_id, amount, unit)
+                    VALUES
+                        (%s, %s, %s, %s)                
+                    ''', (category_query, recipe_query, recipe.amounts[i], recipe.units[i],)
+                )
         conn.commit()
 
     curs.close()
@@ -176,24 +177,23 @@ def insert_catalogue(catalogue):
 
     curs.execute(
     '''
-    INSERT INTO 
-        discount_catalogues (store_chain_id, valid_from, valid_to, id)
-    SELECT 
-        s.id,
-        TO_DATE(%s , 'YYYY/MM/DD'),
-        TO_DATE(%s , 'YYYY/MM/DD'),
-        %s
-    FROM
-        store_chains as s
-    WHERE
-        s.name = %s AND
-        NOT EXISTS 
-            (SELECT
-                *
-            FROM
-                discount_catalogues as d
-            WHERE d.id = %s)
-            ON CONFLICT DO NOTHING
+    INSERT INTO discount_catalogues (store_chain_id, valid_from, valid_to, id)
+        SELECT 
+            s.id,
+            TO_DATE(%s , 'YYYY/MM/DD'),
+            TO_DATE(%s , 'YYYY/MM/DD'),
+            %s
+        FROM
+            store_chains as s
+        WHERE
+            s.name = %s AND
+            NOT EXISTS 
+                (SELECT
+                    *
+                FROM
+                    discount_catalogues as d
+                WHERE d.id = %s)
+                ON CONFLICT DO NOTHING
             
     ''', (catalogue.valid_from, catalogue.valid_to, catalogue.catalogue_id, catalogue.store_name, catalogue.catalogue_id,))
 
@@ -225,32 +225,11 @@ def insert_discount_product(discount):
     cursor.close()
     conn.close()
 
-def insert_match(discount, match):
-    conn = connectToDB()
-    curs = conn.cursor()
-
-
-    curs.execute(
-        '''INSERT INTO product_category (discount_product_id, food_supercategory_id, match_ratio)
-            SELECT
-                discount_products.id,
-                food_supercategories.id,
-                %s
-            FROM 
-                discount_products, food_supercategories
-            WHERE
-                (discount_products.title = %s AND
-                food_supercategories.title = %s) 
-                    ''', (match[1], discount.title, match[0],))
-    conn.commit()
-
-    curs.close()
-    conn.close()
 
 def batch_insert_matches(discounts):
     conn = connectToDB()
     curs = conn.cursor()
-    tuples = []
+    
     for discount in discounts:
         if discount.matches != None:
             for match in discount.matches:

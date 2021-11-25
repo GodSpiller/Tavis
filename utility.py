@@ -10,18 +10,13 @@ def compute_similarity(ingredient, categories):
     best_match = ""
 
     for key in categories:    
-        whole_similarity = ingredient.similarity(categories[key])
-        first_word_similarity = ingredient.similarity(categories[key][0])
+        similarity = ingredient.similarity(categories[key])
 
-        if whole_similarity > first_word_similarity:
-            if whole_similarity > similarity_score:
-                similarity_score = whole_similarity
-                best_match = key
-        else:
-            if first_word_similarity > similarity_score:
-                similarity_score = first_word_similarity
-                best_match = key
-    if similarity_score > 0.8:
+        if similarity > similarity_score:
+            similarity_score = similarity
+            best_match = key
+
+    if similarity_score >= 1:
         return best_match
 
 def convertToMinutes(input):
@@ -35,15 +30,13 @@ def convertToMinutes(input):
 
 
 
-def compute_similarity_discount(title, categories):
-    
-    discount = nlp(title)
+def compute_similarity_discount(discount, categories, offer_amount):
+    offer_amount = len(discount.title.replace(" eller ", ",").replace(" el. ", ",").split(","))
+    discount = nlp(discount)
     similarity_score = 0
     best_match = []
     similarity_dict = {}
     nouninized_discount = ""
-
-    offer_amount = len(title.replace(" eller ", ",").split(","))
 
     for token in discount:
         if token.pos_ == 'NOUN':
