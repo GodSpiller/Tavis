@@ -1,6 +1,5 @@
 import spacy
 import operator
-from collections import OrderedDict
 
 nlp = spacy.load('da_core_news_lg')
 
@@ -16,22 +15,10 @@ def compute_similarity(ingredient, categories):
             similarity_score = similarity
             best_match = key
 
-    if similarity_score >= 1:
+    if similarity_score > 0.8:
         return best_match
 
-def convertToMinutes(input):
-    arr = input.split(' ')
-    arr = list(filter(None, arr))
-
-    if (len(arr) == 2):
-        return int(arr[0])
-    else:
-        return int(arr[0]) * 60 + int(arr[3])
-
-
-
 def compute_similarity_discount(discount, categories, offer_amount):
-    offer_amount = len(discount.title.replace(" eller ", ",").replace(" el. ", ",").split(","))
     discount = nlp(discount)
     similarity_score = 0
     best_match = []

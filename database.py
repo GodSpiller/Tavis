@@ -1,4 +1,4 @@
-import utility
+import utility, spacy, database
 import psycopg2 as psycopg2
 import psycopg2.extras as extras
 from sshtunnel import SSHTunnelForwarder
@@ -29,10 +29,17 @@ def connectToDB():
 
     return conn
 
-def insert_recipe(recipes, match_dict):
+def insert_recipe(recipes):
     conn = connectToDB()
     curs = conn.cursor()
+
+    nlp = spacy.load('da_core_news_lg')
+    categories = database.fetch_ingredients()
+    matches = {}
     
+    for category in categories:
+        matches[category] = nlp(category.lower())
+
     for recipe in recipes:
         curs.execute(
             '''
@@ -85,7 +92,7 @@ def insert_recipe(recipes, match_dict):
 
         for i in range(len(recipe.ingredients)):
 
-            match = utility.compute_similarity(recipe.ingredients[i], match_dict)
+            match = utility.compute_similarity(recipe.ingredients[i], matches)
             if match != None:
                 curs.execute(
                     '''
@@ -154,7 +161,6 @@ def fetch_ingredients():
 
     return categories
 
-
 def fetch_catalogue_id():
     conn = connectToDB()
     curs = conn.cursor()
@@ -169,7 +175,6 @@ def fetch_catalogue_id():
     conn.close()
 
     return catalogue_ids
-
 
 def insert_catalogue(catalogue):
     conn = connectToDB()
@@ -200,8 +205,7 @@ def insert_catalogue(catalogue):
     conn.commit()
     curs.close()
     conn.close()
-    
-    
+     
 def insert_discount_product(discount):
     conn = connectToDB()
     
@@ -224,7 +228,6 @@ def insert_discount_product(discount):
     print("execute_values() done")
     cursor.close()
     conn.close()
-
 
 def batch_insert_matches(discounts):
     conn = connectToDB()

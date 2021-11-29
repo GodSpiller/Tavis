@@ -1,4 +1,18 @@
-import database, spacy
+import database
+
+def get_recurrence(ingredient):
+    return ingredient.get('recurrence')
+
+def process_ingredients():
+    ingredients = []
+
+    for i in raw_ingredients:
+        if i.get('ingredient') not in ingredients:
+            ingredients.append(i.get('ingredient'))
+
+    for i in ingredients:
+        database.insert_ingredient_category(i)
+
 
 file = open('rec.txt', 'r', encoding='utf-8')
 
@@ -16,22 +30,7 @@ for line in lines:
         'category' : ing_cat[1], 
         'recurrence' : int(ratio)})
 
-def get_recurrence(trash):
-    return trash.get('recurrence')
-
 raw_ingredients.sort(key=get_recurrence)
 raw_ingredients.reverse()
-
-
-def process_ingredients():
-    ingredients = []
-
-    for i in raw_ingredients:
-        if i.get('ingredient') not in ingredients:
-            ingredients.append(i.get('ingredient'))
-
-    for i in ingredients:
-        database.insert_ingredient_category(i)
-
 
 process_ingredients()
