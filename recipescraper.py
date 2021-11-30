@@ -1,4 +1,4 @@
-import requests, database
+import requests
 from recipe import Recipe
 from bs4 import BeautifulSoup
 from time import sleep
@@ -78,7 +78,7 @@ def recipe_scraper(urls):
                 sleep(1)
             else:
                 sleep(0.1)
-        except Exception as e: print(e)
+        except Exception as e: print(e) 
 
     #database.insert_recipe(recipes)
 

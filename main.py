@@ -21,8 +21,8 @@ def main():
             database.insert_catalogue(catalogue)
             discounts += discountscraper.scraper(catalogue)
         for discount in discounts:
-            offer_amount = len(discount.title.replace(" eller ", ",").replace(" el. ", ",").split(","))
-            discount.matches = compute_similarity_discount(discount.title, categories, offer_amount)
+            product_count = len(discount.title.replace(" eller ", ",").replace(" el. ", ",").split(","))
+            discount.matches = compute_similarity_discount(discount.title, categories, product_count)
         
         database.insert_discount_product(discounts)
 
