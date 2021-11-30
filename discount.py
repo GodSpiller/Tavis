@@ -7,7 +7,7 @@ class Catalogue(object):
         self.catalogue_id = ""
         self.valid_from = ""
         self.valid_to = ""
-        #liste = 
+         
 
 class Discount(object):
 

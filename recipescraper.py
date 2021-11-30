@@ -7,6 +7,7 @@ from urllib.robotparser import RobotFileParser
 
 
 def recipe_scraper(urls):
+    myfile = open('rec.txt', 'w', encoding = 'utf-8')
     recipes = []
     meal_types = ['Aftensmad', 'Frokost', 'Søde sager', 'Drikkevarer', 'Tilbehør til aftensmad', 'Sundere alternativer', 'Bagværk', 'Morgenmad']
 
@@ -49,6 +50,10 @@ def recipe_scraper(urls):
                         recipe.units.append(None)
 
                     recipe.ingredients.append(temp[i + 2])
+                
+                for reci in recipe.ingredients:
+                    myfile.write(str(reci + '\n'))
+
 
                 # Instructions for the recipe
                 for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
@@ -75,7 +80,7 @@ def recipe_scraper(urls):
                 sleep(0.1)
         except Exception as e: print(e)
 
-    database.insert_recipe(recipes)
+    #database.insert_recipe(recipes)
 
 def get_all_recipes(urls):
     rp=RobotFileParser()

@@ -120,18 +120,20 @@ def insert_recipe(recipes):
     curs.close()
     conn.close()
 
-def insert_ingredient_category(ingredient):
+def insert_ingredient_category(ingredients):
     conn = connectToDB()
     curs = conn.cursor()
 
-    curs.execute(
-        '''
-        INSERT INTO
-            food_supercategories (title)
-        VALUES
-            (%s)
-        ''', (ingredient,)
-    )
+    for ingredient in ingredients:
+
+        curs.execute(
+            '''
+            INSERT INTO
+                food_supercategories (title)
+            VALUES
+                (%s)
+            ''', (ingredient,)
+        )
 
     conn.commit()
 

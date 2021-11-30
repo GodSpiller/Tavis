@@ -12,7 +12,7 @@ class Recipe(object):
         self.amount_unit = ''
         self.time = 0
 
-    def convert_to_minutes(input):
+    def convert_to_minutes(self, input):
         arr = input.split(' ')
         arr = list(filter(None, arr))
 
