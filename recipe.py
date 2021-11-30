@@ -18,6 +18,8 @@ class Recipe(object):
 
         if (len(arr) == 2):
             return int(arr[0])
+        elif arr[1] == 'time' or arr[1] == 'timer':
+            return int(arr[0] * 60)
         else:
             return int(arr[0]) * 60 + int(arr[3])
 

@@ -1,13 +1,12 @@
 import requests, json, spacy, database
 from discount import Discount, Catalogue
-import psycopg2
 from sshtunnel import SSHTunnelForwarder
 from bs4 import BeautifulSoup
 from time import process_time_ns, sleep
 from urllib.robotparser import RobotFileParser
 from requests.models import Response
 from utility import compute_similarity_discount
-
+from difflib import SequenceMatcher
 def scraper(catalogue):
     try:
         link = 'https://etilbudsavis.dk/api/squid/v2/catalogs/{catId}/hotspots'.format(
@@ -57,3 +56,22 @@ def get_all_catalogs(url):
     return catalogues
 
 
+nlp = spacy.load('da_core_news_lg')
+
+string1 = 'lys chokolade'
+string2 = 'snoede lys'
+discount_nouns = ''
+string1 = nlp(string1)
+string2 = nlp(string2)
+
+print(string1.similarity(string2))
+
+for token in string2:
+    if token.pos_ == 'NOUN':
+        discount_nouns += " " + token.text
+
+print(discount_nouns)
+
+discount_nouns = nlp(discount_nouns.lower())
+
+print(string1.similarity(discount_nouns))
