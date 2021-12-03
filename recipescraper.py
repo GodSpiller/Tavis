@@ -84,15 +84,17 @@ def get_all_recipes(urls):
     for url in urls:
         rp.set_url(url)
         rp.read() 
-        r=requests.get(url)
-        r_parse = BeautifulSoup(r.text, 'html.parser')
 
-        for link in r_parse.find_all('a'):                                                      
-            href = link.get('href')                                                             
-            if href != None and 'https://mummum.dk/' in href and href not in recipe_sites:  
-                if '?page' in href and href not in recipe_sites:                            
-                    urls.append(href)                                                  
-                recipe_sites.append(href)
+        if rp.can_fetch('*',url):
+            r=requests.get(url)
+            r_parse = BeautifulSoup(r.text, 'html.parser')
+
+            for link in r_parse.find_all('a'):                                                      
+                href = link.get('href')                                                             
+                if href != None and 'https://{domain}/'.format(domain = urlparse(url).netloc) in href and href not in recipe_sites:  
+                    if '?page' in href and href not in recipe_sites:                            
+                        urls.append(href)                                                  
+                    recipe_sites.append(href)
                                                                    
     return recipe_sites
 
