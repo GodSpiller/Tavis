@@ -92,10 +92,10 @@ def get_all_recipes(urls):
             for link in r_parse.find_all('a'):                                                      
                 href = link.get('href')                                                             
                 if href != None and 'https://{domain}/'.format(domain = urlparse(url).netloc) in href and href not in recipe_sites:  
-                    if '?page' in href and href not in recipe_sites:                            
-                        urls.append(href)                                                  
                     recipe_sites.append(href)
-                                                                   
+                    if '?page' in href and href not in recipe_sites:                            
+                        urls.append(href)
+                        
     return recipe_sites
 
 #Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
