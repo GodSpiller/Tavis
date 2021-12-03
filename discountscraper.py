@@ -55,23 +55,3 @@ def get_all_catalogs(url):
 
     return catalogues
 
-
-nlp = spacy.load('da_core_news_lg')
-
-string1 = 'lys chokolade'
-string2 = 'snoede lys'
-discount_nouns = ''
-string1 = nlp(string1)
-string2 = nlp(string2)
-
-print(string1.similarity(string2))
-
-for token in string2:
-    if token.pos_ == 'NOUN':
-        discount_nouns += " " + token.text
-
-print(discount_nouns)
-
-discount_nouns = nlp(discount_nouns.lower())
-
-print(string1.similarity(discount_nouns))

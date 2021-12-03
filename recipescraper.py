@@ -3,12 +3,10 @@ from recipe import Recipe
 from bs4 import BeautifulSoup
 from time import sleep
 from urllib.robotparser import RobotFileParser
-from urllib.parse import urlparse
 
 
 
 def recipe_scraper(urls):
-    myfile = open('rec.txt', 'w', encoding = 'utf-8')
     recipes = []
     meal_types = ['Aftensmad', 'Frokost', 'Søde sager', 'Drikkevarer', 'Tilbehør til aftensmad', 'Sundere alternativer', 'Bagværk', 'Morgenmad']
 
@@ -51,11 +49,7 @@ def recipe_scraper(urls):
                         recipe.units.append(None)
 
                     recipe.ingredients.append(temp[i + 2])
-                
-                for reci in recipe.ingredients:
-                    myfile.write(str(reci + '\n'))
-
-
+    
                 # Instructions for the recipe
                 for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
                     for ol in div.find_all('ol'):
@@ -95,7 +89,7 @@ def get_all_recipes(urls):
 
         for link in r_parse.find_all('a'):                                                      
             href = link.get('href')                                                             
-            if href != None and 'https://{domain}/'.format(domain = urlparse(url).netloc) in href and href not in recipe_sites:  
+            if href != None and 'https://mummum.dk/' in href and href not in recipe_sites:  
                 if '?page' in href and href not in recipe_sites:                            
                     urls.append(href)                                                  
                 recipe_sites.append(href)
@@ -103,6 +97,6 @@ def get_all_recipes(urls):
     return recipe_sites
 
 #Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
-urls = ['https://mummum.dk/opskrifter/']
+#urls = ['https://mummum.dk/opskrifter/']
 
-recipe_scraper(get_all_recipes(urls))
+#recipe_scraper(get_all_recipes(urls))

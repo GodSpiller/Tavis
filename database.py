@@ -4,7 +4,7 @@ import psycopg2.extras as extras
 from sshtunnel import SSHTunnelForwarder
 from recipe import Recipe
 
-def connectToDB():
+def connect_to_db():
     try:
         
         ssh_tunnel = SSHTunnelForwarder(
@@ -30,7 +30,7 @@ def connectToDB():
     return conn
 
 def insert_recipe(recipes):
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
 
     nlp = spacy.load('da_core_news_lg')
@@ -121,7 +121,7 @@ def insert_recipe(recipes):
     conn.close()
 
 def insert_ingredient_category(ingredients):
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
 
     for ingredient in ingredients:
@@ -141,7 +141,7 @@ def insert_ingredient_category(ingredients):
     conn.close()
 
 def fetch_ingredients():
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
 
     curs.execute(
@@ -164,7 +164,7 @@ def fetch_ingredients():
     return categories
 
 def fetch_catalogue_id():
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
 
     curs.execute(''' SELECT id FROM discount_catalogues''')
@@ -179,7 +179,7 @@ def fetch_catalogue_id():
     return catalogue_ids
 
 def insert_catalogue(catalogue):
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
 
     curs.execute(
@@ -209,16 +209,16 @@ def insert_catalogue(catalogue):
     conn.close()
      
 def insert_discount_product(discount):
-    conn = connectToDB()
+    conn = connect_to_db()
     
     tuples = [tuple(x) for x in discount]
-    print(tuples)
-    # SQL quert to execute
+
     query  = '''INSERT INTO discount_products 
                     (catalogue_id, title, price, valid_from, valid_to, unit, amount) 
                 VALUES 
                     %%s''' % ()
     cursor = conn.cursor()
+    
     try:
         extras.execute_values(cursor, query, tuples)
         conn.commit()
@@ -232,7 +232,7 @@ def insert_discount_product(discount):
     conn.close()
 
 def batch_insert_matches(discounts):
-    conn = connectToDB()
+    conn = connect_to_db()
     curs = conn.cursor()
     
     for discount in discounts:
