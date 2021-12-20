@@ -1,10 +1,12 @@
-import psycopg2 as pg
+import utility, spacy, database
+import psycopg2 as psycopg2
+import psycopg2.extras as extras
 from sshtunnel import SSHTunnelForwarder
+from recipe import Recipe
 
-def connectToDB():
+def connect_to_db():
     try:
-        print('Connecting to the PostgreSQL Database...')
-
+        
         ssh_tunnel = SSHTunnelForwarder(
             ('10.92.0.161', 22),
             ssh_username="ubuntu",
@@ -12,50 +14,145 @@ def connectToDB():
             remote_bind_address=('localhost', 5432)
         )
 
-        ssh_tunnel.start()  
-        
-        conn = pg.connect(
+        ssh_tunnel.start()     
+
+        conn = psycopg2.connect(
             host='localhost',
-            port=ssh_tunnel.local_bind_port,
-            user='postgres',
-            password='tavis',
-            database='tavis0'
+            port=ssh_tunnel.local_bind_port, # REPLACE WITH 'ssh_tunnel.local_bind_port' WHEN SSH
+            user='postgres', # CHANGE WHEN INSERTING TO VM
+            password='tavis', # CHANGE WHEN INSERTING TO VM
+            database='tavis_new' # CHANGE WHEN INSERTING TO VM
         )
 
     except:
         print('Connection Has Failed...') 
-    
+
     return conn
 
-#curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (group, name))
-
-def insertRecipe(title, instructions, img, amount_unit, time, meal_type):
-    conn = connectToDB()
+def insert_recipe(recipes):
+    conn = connect_to_db()
     curs = conn.cursor()
 
-    curs.execute('INSERT INTO recipe (title, instructions, time, amount_unit, meal_type, image_file_path) VALUES(\'%s\', \'%s\', %d, \'%s\', \'%s\', \'%s\')' % (title, instructions, time, amount_unit, meal_type, img))
+    nlp = spacy.load('da_core_news_lg')
+    categories = database.fetch_ingredients()
+    matches = {}
+    
+    for category in categories:
+        matches[category] = nlp(category.lower())
+
+    for recipe in recipes:
+        curs.execute(
+            '''
+            INSERT INTO
+                recipe_types (type) 
+            VALUES
+                (%s)
+            ON CONFLICT DO NOTHING
+            ''', (recipe.meal_type,)
+        )
+
+        conn.commit()
+
+        curs.execute(
+            '''
+            SELECT 
+                id 
+            FROM 
+                recipe_types 
+            WHERE 
+                type=%s
+            ''', (recipe.meal_type,)
+        )
+        
+        type_query = curs.fetchone()[0]
+
+        curs.execute(
+            '''
+            INSERT INTO 
+                recipes (title, instructions, time, amount_unit, type_id, image_file_path)
+            VALUES
+                (%s, %s, %s, %s, %s, %s)
+            ''', (recipe.title, recipe.instructions, recipe.time, recipe.amount_unit, type_query, recipe.image,)
+        )
+
+        conn.commit()
+
+        curs.execute(
+            '''
+            SELECT 
+                id 
+            FROM 
+                recipes
+            WHERE 
+                title=%s
+            ''', (recipe.title,)
+        )
+
+        recipe_query = curs.fetchone()[0]
+
+        for i in range(len(recipe.ingredients)):
+
+            match = utility.compute_similarity(recipe.ingredients[i], matches)
+            if match != None:
+                curs.execute(
+                    '''
+                    SELECT
+                        id
+                    FROM
+                        food_supercategories
+                    WHERE
+                        title=%s                
+                    ''', (match,)
+                )
+            
+                category_query = curs.fetchone()[0]
+
+                curs.execute(
+                    '''
+                    INSERT INTO
+                        ingredients (category, recipe_id, amount, unit)
+                    VALUES
+                        (%s, %s, %s, %s)                
+                    ''', (category_query, recipe_query, recipe.amounts[i], recipe.units[i],)
+                )
+        conn.commit()
+
+    curs.close()
+    conn.close()
+
+def insert_ingredient_category(ingredients):
+    conn = connect_to_db()
+    curs = conn.cursor()
+
+    for ingredient in ingredients:
+
+        curs.execute(
+            '''
+            INSERT INTO
+                food_supercategories (title)
+            VALUES
+                (%s)
+            ''', (ingredient,)
+        )
+
     conn.commit()
 
     curs.close()
     conn.close()
 
-
-def insertIngredients(recipe_title, ingredients, units, amounts):
-    conn = connectToDB()
+def fetch_ingredients():
+    conn = connect_to_db()
     curs = conn.cursor()
 
-    for i in len(ingredients):
+    curs.execute(
+        '''
+        SELECT
+            title
+        FROM
+            food_supercategories
+        '''
+    )
 
-        curs.execute('INSERT INTO ingredient (category, recipe_id, title, amount, unit) ')
-
-    curs.close()
-    conn.close()
-
-def fetch_categories():
-    conn = connectToDB()
-    curs = conn.cursor()
-
-    curs.execute('SELECT title FROM food_category')
     result = curs.fetchall()
 
     categories = map(list, list(result))
@@ -66,36 +163,93 @@ def fetch_categories():
 
     return categories
 
-
-def fetch_super_category(super_category):
-    conn = connectToDB()
+def fetch_catalogue_id():
+    conn = connect_to_db()
     curs = conn.cursor()
 
-    curs.execute("SELECT title FROM food_supercategory WHERE title = '%s'" % (super_category))
+    curs.execute(''' SELECT id FROM discount_catalogues''')
+    
     result = curs.fetchall()
+    catalogue_ids = map(list, list(result))
+    catalogue_ids = sum(catalogue_ids, [])
 
     curs.close()
     conn.close()
 
-    return result
+    return catalogue_ids
 
+def insert_catalogue(catalogue):
+    conn = connect_to_db()
+    curs = conn.cursor()
 
-def insert_category(title, super_category):
-    conn = connectToDB()
+    curs.execute(
+    '''
+    INSERT INTO discount_catalogues (store_chain_id, valid_from, valid_to, id)
+        SELECT 
+            s.id,
+            TO_DATE(%s , 'YYYY/MM/DD'),
+            TO_DATE(%s , 'YYYY/MM/DD'),
+            %s
+        FROM
+            store_chains as s
+        WHERE
+            s.name = %s AND
+            NOT EXISTS 
+                (SELECT
+                    *
+                FROM
+                    discount_catalogues as d
+                WHERE d.id = %s)
+                ON CONFLICT DO NOTHING
+            
+    ''', (catalogue.valid_from, catalogue.valid_to, catalogue.catalogue_id, catalogue.store_name, catalogue.catalogue_id,))
+
+    conn.commit()
+    curs.close()
+    conn.close()
+     
+def insert_discount_product(discount):
+    conn = connect_to_db()
+    
+    tuples = [tuple(x) for x in discount]
+
+    query  = '''INSERT INTO discount_products 
+                    (catalogue_id, title, price, valid_from, valid_to, unit, amount) 
+                VALUES 
+                    %%s''' % ()
+    cursor = conn.cursor()
+    
+    try:
+        extras.execute_values(cursor, query, tuples)
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError) as error:
+        print("Error: %s" % error)
+        conn.rollback()
+        cursor.close()
+        return 1
+    print("execute_values() done")
+    cursor.close()
+    conn.close()
+
+def batch_insert_matches(discounts):
+    conn = connect_to_db()
     curs = conn.cursor()
     
-    if fetch_super_category(super_category):
-        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
-        conn.commit()
-    else:
-        curs.execute('INSERT INTO food_supercategory (title) VALUES(\'%s\')' % super_category)
-        conn.commit()
-        curs.execute('INSERT INTO food_category (supercategory_id, title) VALUES((SELECT id FROM food_supercategory WHERE title = \'%s\'), \'%s\')' % (super_category, title))
-        conn.commit()
+    for discount in discounts:
+        if discount.matches != None:
+            for match in discount.matches:
+                curs.execute('''INSERT INTO product_category (discount_product_id, food_supercategory_id, match_ratio)
+                        SELECT
+                            discount_products.id,
+                            food_supercategories.id,
+                            %s
+                        FROM 
+                            discount_products, food_supercategories
+                        WHERE
+                            discount_products.title = %s AND
+                            food_supercategories.title = %s
+                    ''', (match[1], discount.title, match[0],))
+    conn.commit()
 
     curs.close()
     conn.close()
-
-
-    
-

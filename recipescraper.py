@@ -1,166 +1,104 @@
-import requests, json, utility, database, editDistance, spacy
+import requests
+from recipe import Recipe
 from bs4 import BeautifulSoup
-from time import process_time_ns, sleep
+from time import sleep
 from urllib.robotparser import RobotFileParser
-from requests.models import Response
 
 
-def recipeScraper(urls):
+
+def recipe_scraper(urls):
     recipes = []
-    categories = database.fetch_categories()
-    match_dict = {}
-    recurrence_dict = {}
-
-    for category in categories:
-        match_dict[category] = nlp(category.lower().replace(",", "").replace("rå", ""))
+    meal_types = ['Aftensmad', 'Frokost', 'Søde sager', 'Drikkevarer', 'Tilbehør til aftensmad', 'Sundere alternativer', 'Bagværk', 'Morgenmad']
 
     for url in urls or []:
         try:
             r=requests.get(url)
-            r_parse = BeautifulSoup(r.content, "html.parser")
+            r_parse = BeautifulSoup(r.content, 'html.parser')
 
-            if r_parse.find('h3', text="Ingrediensliste"):
-                tempList = []
-                amounts = []
-                units = []
-                ingredients = []
-                instructions = ""
-                mealType = ''
-                quantity = 1 
-                amountUnit = ''
-                
+            if r_parse.find('h3', text='Ingrediensliste'):
+                recipe = Recipe()
+                temp = []
+             
                 # Gets the title of the recipe
-                title = r_parse.find("h1", {"class" : "entry-title hyphen"}).text
+                recipe.title = r_parse.find('h1', {'class' : "entry-title hyphen"}).text
 
                 # Number of people
                 for select in r_parse.find_all('select', { 'class' : 'single-recipe-amount'}):
                     for option in select.find_all('option', { 'selected' : 'selected' }):
-                        quantity = int(option.text)
+                        recipe.quantity = int(option.text)
 
                 # Gets the time it takes to make the recipe
-                time = r_parse.find("div", {"class" : "recipe-total"}).text
-                time = time.split('\t')
-                time = time[len(time) - 1]
-
-                time = utility.convertToMinutes(time)
+                recipe.set_time(r_parse.find("div", {'class' : 'recipe-total'}).text)
 
                 # Finds the html with ingredients that also contains unit and amount
-                for li in r_parse.find_all('li', {"class" : "components"}):
+                for li in r_parse.find_all('li', {'class' : 'components'}):
                     for span in li.find_all('span'): #print(span.text)
-                        tempList.append(span.text) #listOfIngredients.append(list.text.replace('\n', ' '))
+                        temp.append(span.text) #listOfIngredients.append(list.text.replace('\n', ' '))
 
                 # Preprocess ingredients into three seperate lists: item, unit and amount
-                for i in range(0, len(tempList), 3):
-
-                    # Remove. Probably? Or not.
-                    if tempList[i + 2] == 'salt/peber':
-                        continue
-
+                for i in range(0, len(temp), 3):
                     # Normalizes the value to one person/piece
-                    if tempList[i] !=  '':
-                        amounts.append(float(tempList[i].replace(',', '.')) / quantity)
+                    if temp[i] !=  '':
+                        recipe.amounts.append(float(temp[i].replace(',', '.')) / recipe.quantity)
                     else:
-                        amounts.append(tempList[i])
+                        recipe.amounts.append(None)
 
-                    units.append(tempList[i + 1])
-                    ingredients.append(tempList[i + 2])
+                    if (temp[i + 1] != ''):
+                        recipe.units.append(temp[i + 1])
+                    else:
+                        recipe.units.append(None)
 
+                    recipe.ingredients.append(temp[i + 2])
+    
                 # Instructions for the recipe
                 for div in r_parse.find_all('div', {'class' : 'recipe-procedure'}):
                     for ol in div.find_all('ol'):
                         for li in ol.find_all('li'):
-                            instructions = instructions + "|"  + li.text
-
-                
+                            recipe.instructions = recipe.instructions + "|"  + li.text
+       
                 # Type of meal (Dinner, breakfast, etc.)
                 for p in r_parse.find_all('p', { 'class' : 'breadcrumbs' }):
-                    mealType = p.text
-
-                mealType = mealType.split(' / ')
-                mealType = mealType[2]
+                    recipe.set_meal_type(p.text)
 
                 # Unit amount
                 for span in r_parse.find_all('span', { 'class' : 'recipe-amount-select'}):
-                    amountUnit = span.text
+                    recipe.set_amount_unit(span.text)
 
-                amountUnit = amountUnit.replace('\t', '').split(' ')
-                amountUnit = amountUnit[len(amountUnit) - 1]
+                # Image path
+                recipe.image = str(r_parse.find('div', {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
 
-                image = str(r_parse.find("div", {'class' : 'recipe-image'})).split('"')[15].split(",")[0].split(" ")[0]
+                if recipe.meal_type in meal_types:
+                    recipes.append(recipe)
 
-                print(title)
-
-                for elem in ingredients:
-                    match = editDistance.compute_similarity(elem, match_dict)
-                    print(elem + " : " + match)
-                    elem_match = elem + " : " + match
-                    if elem_match in recurrence_dict:
-                        recurrence_dict[elem_match] += 1
-                    else:
-                        recurrence_dict[elem_match] = 1
-                print("---------------------------------------")
-                    
-                #database.insertRecipe(title, instructions, image, amountUnit, time, mealType)
-                #database.insertIngredients(title, ingredients, units, amounts) 
-
-                '''print('\n\nTitle: ' + title)
-                print('Image: ' + image)
-                print('Time: ' + str(time))
-                print('Type: ' + mealType)
-                print('Unit: ' +  amountUnit)
-                print('--------Ingredients---------')
-                
-                for i in range(len(amounts)):
-                    print(amounts[i], units[i], ingredients[i])
-
-
-                print('--------Instructions---------')
-                print(instructions)
-
-                print('-----------------------------')
-                '''
                 sleep(1)
             else:
                 sleep(0.1)
-        except Exception as e: print(e)
+        except Exception as e: print(e) 
 
-    return recurrence_dict 
+    #database.insert_recipe(recipes)
 
-def getAllRecipes(urls, listOfSitesFound):
-    wantToCrawl = []
+def get_all_recipes(urls):
+    rp=RobotFileParser()
+    recipe_sites = []
+
     for url in urls:
         rp.set_url(url)
         rp.read() 
-        
-        r=requests.get(url)
-        r_parse = BeautifulSoup(r.text, "html.parser")
 
-        for link in r_parse.find_all('a'):                                                      #Finds all links in url
-            href = link.get('href')                                                             #Extracts link from html class
-            if href != None and "https://mummum.dk/" in href and href not in listOfSitesFound:  #Ensures that crawler stays on mummum.dk and not visits the same site twice
-                if "?page" in href and href not in listOfSitesFound:                            #Checks if href is a link the crawler should crawl
-                    wantToCrawl.append(href)                                                    #Add href to wantToCrawl list
-                listOfSitesFound.append(href)                                                   #Add href to lsitOfSitesFound
+        if rp.can_fetch('*',url):
+            r=requests.get(url)
+            r_parse = BeautifulSoup(r.text, 'html.parser')
 
-    if wantToCrawl:                                                                       # If empty == false
-        getAllRecipes(wantToCrawl,listOfSitesFound)
-    return listOfSitesFound
+            for link in r_parse.find_all('a'):                                                      
+                href = link.get('href')                                                             
+                if href != None and 'https://{domain}/'.format(domain = urlparse(url).netloc) in href and href not in recipe_sites:  
+                    recipe_sites.append(href)
+                    if '?page' in href and href not in recipe_sites:                            
+                        urls.append(href)
+                        
+    return recipe_sites
 
-rp=RobotFileParser()
-nlp = spacy.load('da_core_news_lg')
 #Morgen-, Middag-, Aftensmad, og tilbehør til aftensmad
-urllink1 = ["https://mummum.dk/opskrifter/aftensmad/", "https://mummum.dk/opskrifter/morgenmad-og-brunch/",
-            "https://mummum.dk/opskrifter/frokost/",
-            "https://mummum.dk/opskrifter/salater-og-tilbehoer/"]
+#urls = ['https://mummum.dk/opskrifter/']
 
-#Alle opskrifter
-urllink2 = ["https://mummum.dk/opskrifter"] 
-rec_dict = recipeScraper(getAllRecipes(urllink1, []))
-
-file = open('rec.txt', 'w', encoding='utf-8')
-for key in rec_dict:
-    file.write(str(key) + " | " + str(rec_dict[key]) + "\n")
-
-file.close()
-
-#recipeScraper(["https://mummum.dk/graeskarfritter/", "https://mummum.dk/brunede-kartofler/i-ovn/"])
+#recipe_scraper(get_all_recipes(urls))
