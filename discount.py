@@ -1,4 +1,3 @@
-import utility
 
 class Catalogue(object):
 

@@ -39,8 +39,9 @@ def insert_recipe(recipes):
     
     for category in categories:
         matches[category] = nlp(category.lower())
-
+    print(len(recipes))
     for recipe in recipes:
+        
         curs.execute(
             '''
             INSERT INTO
@@ -65,6 +66,8 @@ def insert_recipe(recipes):
         )
         
         type_query = curs.fetchone()[0]
+
+        print(type_query)
 
         curs.execute(
             '''

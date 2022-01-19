@@ -10,3 +10,5 @@ def process_ingredients():
 
     database.insert_ingredient_category(ingredients)
 
+
+process_ingredients()

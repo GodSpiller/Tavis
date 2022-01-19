@@ -16,10 +16,13 @@ class Recipe(object):
         arr = input.split(' ')
         arr = list(filter(None, arr))
 
-        if (len(arr) == 2):
+        if arr[1] == 'time' or arr[1] == 'timer':
+            if len(arr) == 5:
+                return int(int(arr[0]) * 60) + int(arr[3])
+            else:
+                return int(arr[0]) * 60
+        elif (len(arr) == 2):
             return int(arr[0])
-        elif arr[1] == 'time' or arr[1] == 'timer':
-            return int(arr[0] * 60)
         else:
             return int(arr[0]) * 60 + int(arr[3])
 
